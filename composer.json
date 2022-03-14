@@ -1,0 +1,58 @@
+{
+    "name": "go2flow/saas-register-login",
+    "description": "Go2Flow Registration/Login/Team Package",
+    "keywords": [
+        "go2flow",
+        "pspserver"
+    ],
+    "homepage": "https://github.com/go2flow/saas-register-login",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Maximilian Kern",
+            "email": "maximilian.kern@go2flow.ch",
+            "role": "Developer"
+        },
+        {
+            "name": "Marcel Saß",
+            "email": "marcel.sass@go2flow.ch",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0|^8.1",
+        "illuminate/support": "^v9.3.0"
+    },
+    "require-dev": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Go2Flow\\SaasRegisterLogin\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Go2Flow\\SaasRegisterLogin\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Go2Flow\\SaasRegisterLogin\\SaasRegisterLoginServiceProvider"
+            ],
+            "aliases": {
+                "PSPServer": "Go2Flow\\SaasRegisterLogin\\SaasRegisterLoginFacade"
+            }
+        }
+    }
+}
