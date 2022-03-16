@@ -22,7 +22,9 @@
     ],
     "require": {
         "php": "^8.0|^8.1",
-        "illuminate/support": "^v9.3.0"
+        "illuminate/support": "^v9.3.0",
+        "spatie/laravel-permission": "^v5",
+        "go2flow/psp-client": "dev-main"
     },
     "require-dev": {
 
