@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories\Go2Flow\SaasRegisterLogin\Models;
+namespace Go2Flow\SaasRegisterLogin\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -31,9 +31,8 @@ class TeamFactory extends Factory
             'billing_postal_code' => $this->faker->postcode(),
             'billing_country' => $this->faker->countryCode(),
             'receipt_emails' => $this->faker->unique()->safeEmail().';'.$this->faker->unique()->safeEmail(),
-            'vat_id' => 'DE12456',
-            'tax' => now(),
-            'owner_id' => now(),
+            'vat_id' => 'DE265215028',
+            'tax' => $this->faker->randomDigit()
         ];
     }
 

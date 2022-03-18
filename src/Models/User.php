@@ -1,6 +1,7 @@
 <?php
 namespace Go2Flow\SaasRegisterLogin\Models;
 
+use Go2Flow\SaasRegisterLogin\Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -27,4 +28,10 @@ class User extends \Go2Flow\SaasRegisterLogin\Models\AbstractModels\AbstractUser
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /** @return UserFactory */
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories\Go2Flow\SaasRegisterLogin\Models;
+namespace Go2Flow\SaasRegisterLogin\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
