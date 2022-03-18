@@ -2,14 +2,21 @@
 
 namespace Go2Flow\SaasRegisterLogin\Database\Factories;
 
+use Go2Flow\SaasRegisterLogin\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Go2Flow\SaasRegisterLogin\Models\Team>
  */
 class TeamFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Team::class;
+
     /**
      * Define the model's default state.
      *
@@ -23,6 +30,8 @@ class TeamFactory extends Factory
             'psp_id' => $this->generateRandomString(64),
             'name' => $company,
             'email' => $this->faker->unique()->safeEmail(),
+            'currency' => $this->faker->unique()->currencyCode(),
+            'languages' => [ 'de', 'en', 'fr' ],
             'extra_billing_information' => $company,
             'billing_address' => $this->faker->streetAddress(),
             'billing_address_line_2' => 'additional_line_2 text',

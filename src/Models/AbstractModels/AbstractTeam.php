@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
 * @property string $psp_id
 * @property string $name
 * @property string $email
+* @property string $currency
+* @property json $languages
 * @property string $extra_billing_information
 * @property string $billing_address
 * @property string $billing_address_line_2
@@ -53,6 +55,8 @@ abstract class AbstractTeam extends Model
         'psp_id' => 'string',
         'name' => 'string',
         'email' => 'string',
+        'currency' => 'string',
+        'languages' => 'array',
         'extra_billing_information' => 'string',
         'billing_address' => 'string',
         'billing_address_line_2' => 'string',
@@ -79,6 +83,8 @@ abstract class AbstractTeam extends Model
         'psp_id',
         'name',
         'email',
+        'currency',
+        'languages',
         'extra_billing_information',
         'billing_address',
         'billing_address_line_2',
