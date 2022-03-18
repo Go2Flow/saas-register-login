@@ -24,7 +24,7 @@
         "php": "^8.0|^8.1",
         "illuminate/support": "^v9.3.0",
         "spatie/laravel-permission": "^v5",
-        "spatie/laravel-medialibrary": "^9.11.4",
+        "spatie/laravel-medialibrary": "^10.2.0",
         "mpociot/vat-calculator": "^3.0.2",
         "go2flow/psp-client": "dev-main"
     },
