@@ -6,7 +6,6 @@ class TeamsPermission {
 
     public function handle($request, \Closure $next)
     {
-
         if(!empty(auth()->user())){
             // session value set on login
             setPermissionsTeamId(session('team_id'));
