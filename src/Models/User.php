@@ -5,10 +5,13 @@ use Go2Flow\SaasRegisterLogin\Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends \Go2Flow\SaasRegisterLogin\Models\AbstractModels\AbstractUser
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+    protected $guard_name = 'web';
 
     /**
      * The attributes that should be hidden for serialization.
