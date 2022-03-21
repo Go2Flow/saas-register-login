@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
 use Go2Flow\SaasRegisterLogin\Models\User;
 use Illuminate\Http\Request;
@@ -39,6 +39,7 @@ class UserController extends Controller
 
     /**
      * Login
+     * @TODO: session team_id setzen bei Login
      */
     public function login(Request $request)
     {

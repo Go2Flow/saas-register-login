@@ -2,6 +2,10 @@
 
 namespace Go2Flow\SaasRegisterLogin;
 
+use Go2Flow\SaasRegisterLogin\Http\Middleware\TeamsPermission;
+use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepository;
+use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 class SaasRegisterLoginServiceProvider extends ServiceProvider
@@ -9,16 +13,25 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(Router $router)
     {
+        $router->middlewareGroup('TeamPermission', [TeamsPermission::class]);
+
         /*
          * Optional methods to load your package assets
          */
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'pspserver');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'pspserver');
+        $this->app->bind(
+            PermissionRepository::class,
+            PermissionRepositoryInterface::class
+        );
+
+        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'saas-register-login');
+        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'saas-register-login');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+
+
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -57,5 +70,7 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
         $this->app->singleton('saas-register-login', function () {
             return new SaasRegisterLogin;
         });
+
+
     }
 }

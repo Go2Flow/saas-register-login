@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 *
 * @property bigInteger $id
 * @property string $psp_id
+* @property bigInteger $owner_id
 * @property string $name
 * @property string $email
 * @property string $currency
@@ -31,7 +32,6 @@ use Illuminate\Database\Eloquent\Model;
 * @property \Carbon\Carbon $created_at
 * @property \Carbon\Carbon $updated_at
 * @property \Carbon\Carbon $deleted_at
-* @property bigInteger $owner_id
 * @property \Go2Flow\SaasRegisterLogin\Models\User|null $owner
 * @property \Illuminate\Database\Eloquent\Collection $invoices
 * @property \Illuminate\Database\Eloquent\Collection $customers
@@ -53,6 +53,7 @@ abstract class AbstractTeam extends Model
     protected $casts = [
         'id' => 'integer',
         'psp_id' => 'string',
+        'owner_id' => 'integer',
         'name' => 'string',
         'email' => 'string',
         'currency' => 'string',
@@ -69,8 +70,7 @@ abstract class AbstractTeam extends Model
         'tax' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
-        'owner_id' => 'integer'
+        'deleted_at' => 'datetime'
     ];
     
     /**  
@@ -81,6 +81,7 @@ abstract class AbstractTeam extends Model
     protected $fillable = [
         'id',
         'psp_id',
+        'owner_id',
         'name',
         'email',
         'currency',
@@ -97,8 +98,7 @@ abstract class AbstractTeam extends Model
         'tax',
         'created_at',
         'updated_at',
-        'deleted_at',
-        'owner_id'
+        'deleted_at'
     ];
     
     public function owner()
@@ -148,7 +148,7 @@ abstract class AbstractTeam extends Model
     
     public function type_sets()
     {
-        return $this->hasMany('\App\Models\Course\TypeSet', 'team_id', 'id');
+        return $this->hasMany('\App\Models\Course\Type\Set', 'team_id', 'id');
     }
     
     public function users()

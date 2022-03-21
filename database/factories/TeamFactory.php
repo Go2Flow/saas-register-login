@@ -4,6 +4,7 @@ namespace Go2Flow\SaasRegisterLogin\Database\Factories;
 
 use Go2Flow\SaasRegisterLogin\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Spatie\Permission\Models\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Go2Flow\SaasRegisterLogin\Models\Team>
