@@ -66,6 +66,7 @@ class UserController extends Controller
 
     /**
      * Logout
+     * @TODO: session team_id löschen bei logout
      */
     public function logout()
     {
