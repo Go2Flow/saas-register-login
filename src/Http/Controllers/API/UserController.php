@@ -69,12 +69,19 @@ class UserController extends Controller
 
     /**
      * Logout
-     * @TODO: session team_id löschen bei logout
      */
     public function logout()
     {
+
         try {
+            // Get user who requested the logout
+            $user = request()->user(); //or Auth::user()
+            // Revoke current user token
+            $user->tokens()->delete();
+
             session()->flush();
+            session()->regenerate();
+
             $success = true;
             $message = 'Successfully logged out';
         } catch (\Illuminate\Database\QueryException $ex) {

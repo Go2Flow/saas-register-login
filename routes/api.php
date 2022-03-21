@@ -15,6 +15,6 @@ Route::group([
         Route::post('register', [UserController::class, 'register']);
         Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
-        Route::get('/permission/{permissionName}', [PermissionController::class, 'check']);
+        Route::get('/permission/{permissionName}', [PermissionController::class, 'check'])->middleware('auth:sanctum');
     });
 });
