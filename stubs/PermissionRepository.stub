@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Repositories;
+
+use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
+use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepository as BasePermissionRepository;
+
+class PermissionRepository extends BasePermissionRepository implements PermissionRepositoryInterface {
+
+    public array $systemPermissions = [
+        // System Permissions
+
+        // End System Permissions
+    ];
+
+    public array $defaultRoles = [
+        'Administrator' => 'all',
+        'Editor' => [
+            'users.index',
+            'users.create',
+            'users.edit',
+            'teams.edit',
+            'teams.invoices',
+        ]
+    ];
+
+}

@@ -3,7 +3,6 @@
 namespace Go2Flow\SaasRegisterLogin;
 
 use Go2Flow\SaasRegisterLogin\Http\Middleware\TeamsPermission;
-use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepository;
 use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
@@ -21,8 +20,8 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
          * Optional methods to load your package assets
          */
         $this->app->bind(
-            PermissionRepository::class,
-            PermissionRepositoryInterface::class
+            PermissionRepositoryInterface::class,
+            \App\Repositories\PermissionRepository::class
         );
 
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'saas-register-login');
@@ -37,6 +36,10 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('saas-register-login.php'),
             ], 'config');
+
+            $this->publishes([
+                __DIR__.'/../stubs/PermissionRepository.stub' => app_path('Repositories/PermissionRepository.php'),
+            ], 'repositories');
 
             // Publishing the views.
             /*$this->publishes([

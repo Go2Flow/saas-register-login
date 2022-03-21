@@ -2,6 +2,7 @@
 
 namespace Go2Flow\SaasRegisterLogin\Repositories;
 
+use Go2Flow\SaasRegisterLogin\Models\Team;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -47,7 +48,7 @@ class PermissionRepository implements PermissionRepositoryInterface {
         return true;
     }
 
-    public function createBaseRoles($team) :bool
+    public function createBaseRoles(Team $team) :bool
     {
         // Save the current Team ID
         $savePermTeamId = getPermissionsTeamId();
