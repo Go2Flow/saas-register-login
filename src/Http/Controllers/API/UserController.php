@@ -48,9 +48,11 @@ class UserController extends Controller
             'password' => $request->password,
         ];
 
+
         if (Auth::attempt($credentials)) {
             $success = true;
             $message = 'User login successfully';
+            setSaasTeamId(\auth()->user()->teams->first()->id);
         } else {
             $success = false;
             $message = 'Unauthorised';
@@ -61,6 +63,7 @@ class UserController extends Controller
             'success' => $success,
             'message' => $message,
         ];
+
         return response()->json($response);
     }
 

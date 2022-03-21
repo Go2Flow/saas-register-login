@@ -2,12 +2,13 @@
 namespace Go2Flow\SaasRegisterLogin\Models;
 
 use Go2Flow\SaasRegisterLogin\Database\Factories\UserFactory;
+use Go2Flow\SaasRegisterLogin\Models\AbstractModels\AbstractUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends \Go2Flow\SaasRegisterLogin\Models\AbstractModels\AbstractUser
+class User extends AbstractUser
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
