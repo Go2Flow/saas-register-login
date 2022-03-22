@@ -28,7 +28,6 @@ use Illuminate\Database\Eloquent\Model;
 * @property string $billing_country
 * @property string $receipt_emails
 * @property string $vat_id
-* @property decimal $tax
 * @property \Carbon\Carbon $created_at
 * @property \Carbon\Carbon $updated_at
 * @property \Carbon\Carbon $deleted_at
@@ -42,6 +41,7 @@ use Illuminate\Database\Eloquent\Model;
 * @property \Illuminate\Database\Eloquent\Collection $options
 * @property \Illuminate\Database\Eloquent\Collection $locations
 * @property \Illuminate\Database\Eloquent\Collection $type_sets
+* @property \Illuminate\Database\Eloquent\Collection $taxes
 */ 
 abstract class AbstractTeam extends Model
 {
@@ -67,7 +67,6 @@ abstract class AbstractTeam extends Model
         'billing_country' => 'string',
         'receipt_emails' => 'string',
         'vat_id' => 'string',
-        'tax' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
@@ -95,7 +94,6 @@ abstract class AbstractTeam extends Model
         'billing_country',
         'receipt_emails',
         'vat_id',
-        'tax',
         'created_at',
         'updated_at',
         'deleted_at'
@@ -149,6 +147,11 @@ abstract class AbstractTeam extends Model
     public function type_sets()
     {
         return $this->hasMany('\App\Models\Course\Type\Set', 'team_id', 'id');
+    }
+    
+    public function taxes()
+    {
+        return $this->hasMany('\App\Models\Tax', 'team_id', 'id');
     }
     
     public function users()
