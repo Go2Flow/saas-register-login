@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 * @package Go2Flow\SaasRegisterLogin\Models\AbstractModels
 *
 * @property bigInteger $id
+* @property bigInteger $referral_id
 * @property string $salutation
 * @property string $firstname
 * @property string $lastname
@@ -19,9 +20,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 * @property \Carbon\Carbon $email_verified_at
 * @property string $password
 * @property string $remember_token
+* @property \Carbon\Carbon $terms_accepted_at
 * @property \Carbon\Carbon $created_at
 * @property \Carbon\Carbon $updated_at
 * @property \Carbon\Carbon $deleted_at
+* @property \Go2Flow\SaasRegisterLogin\Models\Referral|null $referral
 * @property \Illuminate\Database\Eloquent\Collection $owned_teams
 * @property \Illuminate\Database\Eloquent\Collection $created_courses
 * @property \Illuminate\Database\Eloquent\Collection $courses
@@ -44,6 +47,7 @@ abstract class AbstractUser extends \Illuminate\Foundation\Auth\User
      */
     protected $casts = [
         'id' => 'integer',
+        'referral_id' => 'integer',
         'salutation' => 'string',
         'firstname' => 'string',
         'lastname' => 'string',
@@ -51,6 +55,7 @@ abstract class AbstractUser extends \Illuminate\Foundation\Auth\User
         'email_verified_at' => 'datetime',
         'password' => 'string',
         'remember_token' => 'string',
+        'terms_accepted_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
@@ -62,6 +67,11 @@ abstract class AbstractUser extends \Illuminate\Foundation\Auth\User
      * @var array
      */
     protected $dates = ['deleted_at'];
+    
+    public function referral()
+    {
+        return $this->belongsTo('\Go2Flow\SaasRegisterLogin\Models\Referral', 'referral_id', 'id');
+    }
     
     public function owned_teams()
     {
