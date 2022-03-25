@@ -1,5 +1,7 @@
 <?php
 
+use Go2Flow\SaasRegisterLogin\Models\Team;
+
 if (! function_exists('setSaasTeamId')) {
     /**
      * @param int|string|\Illuminate\Database\Eloquent\Model $id
@@ -19,4 +21,15 @@ if (! function_exists('getSaasTeamId')) {
     {
         return session()->get('team_id', null);
     }
+}
+
+if (! function_exists('currentTeam')) {
+    /**
+     * @return Team|null
+     */
+    function currentTeam(): ?Team
+    {
+       return Team::find(getSaasTeamId());
+    }
+
 }
