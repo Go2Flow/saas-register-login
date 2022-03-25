@@ -33,9 +33,16 @@ class User extends AbstractUser
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['name'];
+
     /** @return UserFactory */
     protected static function newFactory()
     {
         return UserFactory::new();
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->firstname.' '.$this->lastname;
     }
 }
