@@ -62,6 +62,27 @@ abstract class AbstractUser extends \Illuminate\Foundation\Auth\User
     ];
     
     /**  
+     * The attributes that are mass assignable.
+     * 
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'referral_id',
+        'salutation',
+        'firstname',
+        'lastname',
+        'email',
+        'email_verified_at',
+        'password',
+        'remember_token',
+        'terms_accepted_at',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+    
+    /**  
      * The attributes that should be mutated to dates.
      * 
      * @var array
