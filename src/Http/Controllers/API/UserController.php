@@ -2,7 +2,16 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
+use Carbon\Carbon;
+use Go2Flow\SaasRegisterLogin\Http\Requests\Api\UserCreateRequest;
+use Go2Flow\SaasRegisterLogin\Models\Team;
 use Go2Flow\SaasRegisterLogin\Models\User;
+use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
+use Go2Flow\SaasRegisterLogin\Repositories\UserRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,20 +19,32 @@ use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
+    private UserRepositoryInterface $userRepository;
+    private TeamRepositoryInterface $teamRepository;
+
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        TeamRepositoryInterface $teamRepository
+    ) {
+        $this->userRepository = $userRepository;
+        $this->teamRepository = $teamRepository;
+    }
+
     /**
-     * Register
+     * @param UserCreateRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request)
+    public function register(UserCreateRequest $request)
     {
         try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->save();
+            $user = $this->userRepository->create($request->get('user'));
+            $team = $this->teamRepository->create($request->get('team'), $user);
+            $user->teams()->attach($team->id);
 
             $success = true;
             $message = 'User register successfully';
+
+            event(new Registered($user));
         } catch (\Illuminate\Database\QueryException $ex) {
             $success = false;
             $message = $ex->getMessage();
@@ -95,5 +116,39 @@ class UserController extends Controller
             'message' => $message,
         ];
         return response()->json($response);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws AuthorizationException
+     */
+    public function verify(Request $request)
+    {
+        if (! hash_equals((string) $request->route('id'), (string) $request->user()->getKey())) {
+            throw new AuthorizationException;
+        }
+
+        if (! hash_equals((string) $request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
+            throw new AuthorizationException;
+        }
+
+        if ($request->user()->hasVerifiedEmail()) {
+            return $request->wantsJson()
+                ? new JsonResponse([], 204)
+                : redirect('/login');
+        }
+
+        if ($request->user()->markEmailAsVerified()) {
+            event(new Verified($request->user()));
+        }
+
+        if ($response = $this->verified($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/login')->with('verified', true);
     }
 }

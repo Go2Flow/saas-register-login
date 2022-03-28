@@ -2,8 +2,13 @@
 
 namespace Go2Flow\SaasRegisterLogin;
 
+use App\Repositories\PermissionRepository;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\TeamsPermission;
 use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
+use Go2Flow\SaasRegisterLogin\Repositories\TeamRepository;
+use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
+use Go2Flow\SaasRegisterLogin\Repositories\UserRepository;
+use Go2Flow\SaasRegisterLogin\Repositories\UserRepositoryInterface;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,7 +26,15 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
          */
         $this->app->bind(
             PermissionRepositoryInterface::class,
-            \App\Repositories\PermissionRepository::class
+            PermissionRepository::class
+        );
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            UserRepository::class
+        );
+        $this->app->bind(
+            TeamRepositoryInterface::class,
+            TeamRepository::class
         );
 
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'saas-register-login');

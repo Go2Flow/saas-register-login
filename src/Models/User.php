@@ -3,12 +3,13 @@ namespace Go2Flow\SaasRegisterLogin\Models;
 
 use Go2Flow\SaasRegisterLogin\Database\Factories\UserFactory;
 use Go2Flow\SaasRegisterLogin\Models\AbstractModels\AbstractUser;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends AbstractUser
+class User extends AbstractUser implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
