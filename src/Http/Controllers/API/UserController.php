@@ -46,6 +46,7 @@ class UserController extends Controller
 
             event(new Registered($user));
         } catch (\Illuminate\Database\QueryException $ex) {
+            $user = null;
             $success = false;
             $message = $ex->getMessage();
         }
@@ -54,6 +55,7 @@ class UserController extends Controller
         $response = [
             'success' => $success,
             'message' => $message,
+            'user_id' => optional($user)->id
         ];
         return response()->json($response);
     }
@@ -68,14 +70,22 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => $request->password,
         ];
-
-
-        if (Auth::attempt($credentials)) {
+        /** @var User $user */
+        $user = User::whereEmail($request->email)->first();
+        $authResult = Auth::attempt($credentials);
+        $needVerification = false;
+        $success = false;
+        if (!$user) {
+            $message = 'Unauthorised';
+        } elseif ($authResult && $user->hasVerifiedEmail()) {
             $success = true;
             $message = 'User login successfully';
-            setSaasTeamId(\auth()->user()->teams->first()->id);
+            setSaasTeamId(auth()->user()->teams->first()->id);
+        } elseif (!$user->hasVerifiedEmail() && $authResult) {
+            $needVerification = $user->id;
+            $message = 'Your E-Mail-Address is not verified!';
+            auth()->logout();
         } else {
-            $success = false;
             $message = 'Unauthorised';
         }
 
@@ -83,6 +93,7 @@ class UserController extends Controller
         $response = [
             'success' => $success,
             'message' => $message,
+            'need_verification' => $needVerification
         ];
 
         return response()->json($response);
