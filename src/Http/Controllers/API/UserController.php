@@ -123,32 +123,58 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws AuthorizationException
      */
-    public function verify(Request $request)
+    public function verify(User $user, Request $request)
     {
-        if (! hash_equals((string) $request->route('id'), (string) $request->user()->getKey())) {
+        if (! hash_equals((string) $request->route()->originalParameter('user'), (string) $user->getKey())) {
             throw new AuthorizationException;
         }
 
-        if (! hash_equals((string) $request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
+        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
             throw new AuthorizationException;
         }
 
-        if ($request->user()->hasVerifiedEmail()) {
+        if ($user->hasVerifiedEmail()) {
             return $request->wantsJson()
                 ? new JsonResponse([], 204)
-                : redirect('/login');
+                : redirect($this->localizeUrl('/login'));
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
         }
 
-        if ($response = $this->verified($request)) {
-            return $response;
-        }
+        Auth::login($user);
+        setSaasTeamId($user->teams->first()->id);
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
-            : redirect('/login')->with('verified', true);
+            : redirect($this->localizeUrl('/backend'))->with('verified', true);
+    }
+
+    /**
+     * @param User $user
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function resend(User $user, Request $request)
+    {
+        if ($user->hasVerifiedEmail()) {
+            return $request->wantsJson()
+                ? new JsonResponse([], 204)
+                : redirect($this->localizeUrl('/login'));
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 202)
+            : back()->with('resent', true);
+    }
+
+    private function localizeUrl(string $url) {
+        if (config('saas-register-login.is_multi_language', false)) {
+            $url = '/'.app()->getLocale().$url;
+        }
+        return $url;
     }
 }

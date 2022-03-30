@@ -7,6 +7,9 @@ class TeamsPermission {
     public function handle($request, \Closure $next)
     {
         if(!empty(auth()->user())){
+            if (getSaasTeamId() === null) {
+                setSaasTeamId(auth()->user()->teams->first()->id);
+            }
             // session value set on login
             setPermissionsTeamId(session('team_id'));
         }

@@ -8,7 +8,10 @@ Route::group([
     'prefix' => 'srl'
 ], function () {
 
-    Route::group(['middleware' => config('saas-register-login.middleware', ['web', 'auth'])], function () {
-        Route::get('email/verify/{id}/{hash}', [UserController::class, 'verify'])->name('verification.verify');
+    Route::group(['middleware' => config('saas-register-login.auth_middleware', ['web', 'auth'])], function () {
+
+    });
+    Route::group(['middleware' => config('saas-register-login.open_middleware', ['web'])], function () {
+        Route::get('email/verify/{user}/{hash}', [UserController::class, 'verify'])->name('verification.verify');
     });
 });
