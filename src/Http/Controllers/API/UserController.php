@@ -182,6 +182,14 @@ class UserController extends Controller
             : back()->with('resent', true);
     }
 
+    public function impersonate(User $user, Request $request)
+    {
+        if (! $request->hasValidSignature()) {
+            abort(401);
+        }
+        dd($user);
+    }
+
     private function localizeUrl(string $url) {
         if (config('saas-register-login.is_multi_language', false)) {
             $url = '/'.app()->getLocale().$url;

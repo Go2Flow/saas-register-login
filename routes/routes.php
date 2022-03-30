@@ -15,11 +15,6 @@ Route::group([
     });
     Route::group(['middleware' => config('saas-register-login.open_middleware', ['web'])], function () {
         Route::get('email/verify/{user}/{hash}', [UserController::class, 'verify'])->name('verification.verify');
-        Route::get('/impersonate/{user}', function (Request $request) {
-            if (! $request->hasValidSignature()) {
-                abort(401);
-            }
-            dd('impersonate');
-        })->name('impersonate');
+        Route::get('/impersonate/{user}', [UserController::class, 'impersonate'])->name('impersonate');
     });
 });
