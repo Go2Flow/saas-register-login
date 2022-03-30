@@ -134,9 +134,10 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws AuthorizationException
      */
-    public function verify(User $user, Request $request)
+    public function verify(int $id, Request $request)
     {
-        if (! hash_equals((string) $request->route()->originalParameter('user'), (string) $user->getKey())) {
+        $user = User::findOrFail($id);
+        if (! hash_equals((string) $request->route('id'), (string) $user->getKey())) {
             throw new AuthorizationException;
         }
 
@@ -178,7 +179,9 @@ class UserController extends Controller
         $user->sendEmailVerificationNotification();
 
         return $request->wantsJson()
-            ? new JsonResponse([], 202)
+            ? new JsonResponse([
+                'success' => true
+            ], 202)
             : back()->with('resent', true);
     }
 
