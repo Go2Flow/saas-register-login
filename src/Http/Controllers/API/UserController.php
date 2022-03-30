@@ -190,7 +190,12 @@ class UserController extends Controller
         if (! $request->hasValidSignature()) {
             abort(401);
         }
-        dd($user);
+
+        Auth::login($user);
+        setSaasTeamId($user->teams->first()->id);
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect($this->localizeUrl('/login'));
     }
 
     private function localizeUrl(string $url) {
