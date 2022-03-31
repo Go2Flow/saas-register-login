@@ -2,9 +2,8 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
 use Go2Flow\SaasRegisterLogin\Models\Referral;
-use function session;
 
 class ReferralController extends Controller
 {

@@ -2,7 +2,7 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
 use Nnjeim\World\Models\Currency;
 use Nnjeim\World\World;
 use function response;

@@ -3,7 +3,7 @@
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
 
 class PermissionController extends Controller
 {

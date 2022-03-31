@@ -2,7 +2,7 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
 use Go2Flow\SaasRegisterLogin\Rules\ValidCountry;
 use Go2Flow\SaasRegisterLogin\Rules\ValidVatNumber;
 use Illuminate\Http\Request;

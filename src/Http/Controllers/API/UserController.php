@@ -2,9 +2,7 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
-use Carbon\Carbon;
 use Go2Flow\SaasRegisterLogin\Http\Requests\Api\UserCreateRequest;
-use Go2Flow\SaasRegisterLogin\Models\Team;
 use Go2Flow\SaasRegisterLogin\Models\User;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\UserRepositoryInterface;
@@ -14,8 +12,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
+use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
