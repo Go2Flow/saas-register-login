@@ -2,8 +2,8 @@
 
 namespace Go2Flow\SaasRegisterLogin\Rules;
 
-use Go2Flow\PSPServer\Countries;
 use Illuminate\Contracts\Validation\Rule;
+use Nnjeim\World\World;
 
 class ValidCountry implements Rule
 {
@@ -12,9 +12,17 @@ class ValidCountry implements Rule
      */
     public function passes($attribute, $value)
     {
+        $lang = session()->get('locale', 'en');
+        $action = World::setLocale($lang)->countries(['fields' => 'iso2']);
+        $options = [];
+        if ($action->success) {
+            foreach ($action->data as $country) {
+                $options[] = $country['iso2'];
+            }
+        }
         return in_array(
             $value,
-            array_keys(Countries::all())
+            $options
         );
     }
 

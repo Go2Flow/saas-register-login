@@ -2,6 +2,7 @@
 
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\PermissionController;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\UserController;
+use Go2Flow\SaasRegisterLogin\Http\Controllers\API\ValidationController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -17,5 +18,8 @@ Route::group([
         Route::post('/email/verify/resend/{user}', [UserController::class, 'resend'])->name('verification.resend');
 
         Route::get('/permission/{permissionName}', [PermissionController::class, 'check'])->middleware('auth:sanctum');
+
+        Route::post('/validator/vat_id', [ValidationController::class, 'validateVatId']);
+        Route::post('/validator/country', [ValidationController::class, 'validateCountry']);
     });
 });

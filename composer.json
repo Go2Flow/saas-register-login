@@ -26,6 +26,7 @@
         "spatie/laravel-permission": "^v5",
         "spatie/laravel-medialibrary": "^10.2.0",
         "mpociot/vat-calculator": "^3.0.2",
+        "nnjeim/world": "^1.1",
         "go2flow/psp-client": "dev-main"
     },
     "require-dev": {
