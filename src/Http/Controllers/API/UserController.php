@@ -73,7 +73,7 @@ class UserController extends Controller
         $needVerification = false;
         $success = false;
         if (!$user) {
-            $message = 'Unauthorised';
+            $message = 'Wrong password or e-mail-address!';
         } elseif ($authResult && $user->hasVerifiedEmail()) {
             $success = true;
             $message = 'User login successfully';
@@ -83,7 +83,7 @@ class UserController extends Controller
             $message = 'Your E-Mail-Address is not verified!';
             auth()->logout();
         } else {
-            $message = 'Unauthorised';
+            $message = 'Wrong password or e-mail-address!';
         }
 
         // response
