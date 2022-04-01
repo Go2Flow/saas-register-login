@@ -18,6 +18,8 @@ Route::group([
         Route::post('register', [UserController::class, 'register']);
         Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
         Route::post('/email/verify/resend/{user}', [UserController::class, 'resend'])->name('verification.resend');
+        Route::post('/password/reset/mail', [UserController::class, 'sendResetPasswordMail'])->name('password.reset.send');
+        Route::post('/password/reset/submit', [UserController::class, 'passwordResetSave'])->name('password.reset.save');
 
         Route::get('/permission/{permissionName}', [PermissionController::class, 'check'])->middleware('auth:sanctum');
 

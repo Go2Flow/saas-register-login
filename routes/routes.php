@@ -16,6 +16,7 @@ Route::group([
     });
     Route::group(['middleware' => config('saas-register-login.open_middleware', ['web'])], function () {
         Route::get('email/verify/{id}/{hash}', [UserController::class, 'verify'])->name('verification.verify');
+        Route::get('password/reset/{token}', [UserController::class, 'passwortReset'])->name('password.reset');
         Route::get('/impersonate/{user}', [UserController::class, 'impersonate'])->name('impersonate');
         Route::get('/team/change/{team}', [TeamController::class, 'change']);
     });

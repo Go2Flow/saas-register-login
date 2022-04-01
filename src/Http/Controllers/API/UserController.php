@@ -7,12 +7,16 @@ use Go2Flow\SaasRegisterLogin\Models\User;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\UserRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -133,6 +137,7 @@ class UserController extends Controller
      */
     public function verify(int $id, Request $request)
     {
+        /** @var User $user */
         $user = User::findOrFail($id);
         if (! hash_equals((string) $request->route('id'), (string) $user->getKey())) {
             throw new AuthorizationException;
@@ -177,7 +182,7 @@ class UserController extends Controller
 
         return $request->wantsJson()
             ? new JsonResponse([
-                'success' => true
+                'success' => true,
             ], 202)
             : back()->with('resent', true);
     }
@@ -195,10 +200,63 @@ class UserController extends Controller
             : redirect($this->localizeUrl('/login'));
     }
 
-    private function localizeUrl(string $url) {
-        if (config('saas-register-login.is_multi_language', false)) {
-            $url = '/'.app()->getLocale().$url;
+    public function sendResetPasswordMail(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+        $response = Password::broker()->sendResetLink($request->only('email'));
+        $success = false;
+        if ($response === Password::broker()::RESET_LINK_SENT) {
+            $success = true;
         }
-        return $url;
+        return $request->wantsJson()
+            ? new JsonResponse([
+                'success' => $success,
+                'message' => $response
+            ], 202)
+            : back()->with('send_password_reset', true);
+    }
+
+    public function passwortReset(Request $request)
+    {
+        $token = $request->route()->parameter('token');
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect($this->localizeUrl('/reset/password/'.$token.'/'.$request->email));
+    }
+
+    public function passwordResetSave(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+        $success = false;
+        if ($status === Password::PASSWORD_RESET) {
+            $success = true;
+            $user = User::whereEmail($request->email)->first();
+            if (!$user->hasVerifiedEmail() && $user->markEmailAsVerified()) {
+                event(new Verified($user));
+            }
+            Auth::login($user);
+            setSaasTeamId($user->teams->first()->id);
+        }
+        return new JsonResponse([
+            'success' => $success,
+            'message' => $status
+        ], 202);
     }
 }
