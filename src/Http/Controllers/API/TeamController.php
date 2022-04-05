@@ -10,6 +10,10 @@ class TeamController extends Controller
 {
     function users()
     {
-        return currentTeam()->users;
+        $team = currentTeam();
+        if ($team) {
+            return currentTeam()->users;
+        }
+        abort('401', 'Unauthenticated');
     }
 }
