@@ -53,4 +53,17 @@ abstract class AbstractTeamLayouts extends Pivot
         'primary_color' => 'string',
         'secondary_color' => 'string'
     ];
+    
+    /**  
+     * The attributes that are mass assignable.
+     * 
+     * @var array
+     */
+    protected $fillable = [
+        'team_id',
+        'layouts_id',
+        'custom_css',
+        'primary_color',
+        'secondary_color'
+    ];
 }

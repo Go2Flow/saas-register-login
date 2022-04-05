@@ -37,6 +37,21 @@ abstract class AbstractLayouts extends Model
         'updated_at' => 'datetime'
     ];
     
+    /**  
+     * The attributes that are mass assignable.
+     * 
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'name',
+        'version',
+        'url',
+        'available',
+        'created_at',
+        'updated_at'
+    ];
+    
     public function teams()
     {
         return $this->belongsToMany('\Go2Flow\SaasRegisterLogin\Models\Team', 'team_layouts', 'layouts_id', 'team_id')->withPivot('custom_css', 'primary_color', 'secondary_color');
