@@ -28,6 +28,10 @@ use Illuminate\Database\Eloquent\Model;
 * @property string $billing_country
 * @property string $receipt_emails
 * @property string $vat_id
+* @property string $tax_number
+* @property string $bank_name
+* @property string $bank_iban
+* @property string $bank_swift
 * @property \Carbon\Carbon $created_at
 * @property \Carbon\Carbon $updated_at
 * @property \Carbon\Carbon $deleted_at
@@ -67,6 +71,10 @@ abstract class AbstractTeam extends Model
         'billing_country' => 'string',
         'receipt_emails' => 'string',
         'vat_id' => 'string',
+        'tax_number' => 'string',
+        'bank_name' => 'string',
+        'bank_iban' => 'string',
+        'bank_swift' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
@@ -94,6 +102,10 @@ abstract class AbstractTeam extends Model
         'billing_country',
         'receipt_emails',
         'vat_id',
+        'tax_number',
+        'bank_name',
+        'bank_iban',
+        'bank_swift',
         'created_at',
         'updated_at',
         'deleted_at'
@@ -157,5 +169,10 @@ abstract class AbstractTeam extends Model
     public function users()
     {
         return $this->belongsToMany('\Go2Flow\SaasRegisterLogin\Models\User', 'team_user', 'team_id', 'user_id');
+    }
+    
+    public function layouts()
+    {
+        return $this->belongsToMany('\Go2Flow\SaasRegisterLogin\Models\Layouts', 'team_layouts', 'team_id', 'layouts_id')->withPivot('custom_css', 'primary_color', 'secondary_color');
     }
 }
