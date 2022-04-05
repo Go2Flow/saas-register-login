@@ -2,6 +2,7 @@
 
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\PermissionController;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\ReferralController;
+use Go2Flow\SaasRegisterLogin\Http\Controllers\API\TeamController;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\UserController;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\ValidationController;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\WorldCountryCurrencyController;
@@ -32,5 +33,8 @@ Route::group([
         Route::get('/options/language', [WorldCountryCurrencyController::class, 'getLanguageOptions']);
         // WorldCountryCurrency END
         Route::get('/options/referral', [ReferralController::class, 'getReferralOptions']);
+
+        // Team
+        Route::get('/team/users', [TeamController::class, 'users']);
     });
 });

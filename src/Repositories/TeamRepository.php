@@ -18,6 +18,9 @@ class TeamRepository implements TeamRepositoryInterface
             $data['owner_id'] = $owner->id;
             $data['email'] = $data['email'] ?? $owner->email;
         }
+        if (is_string($data['languages'])) {
+            $data['languages'] = [$data['languages']];
+        }
         $data['psp_id'] = uniqid(); // @TODO: hook into psp service to get a real id
         $team = new Team($data);
         $team->save();
