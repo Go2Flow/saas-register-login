@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
 * @property string $billing_state
 * @property string $billing_postal_code
 * @property string $billing_country
-* @property string $receipt_emails
+* @property json $receipt_emails
 * @property string $vat_id
 * @property string $tax_number
 * @property string $bank_name
@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
 * @property \Carbon\Carbon $updated_at
 * @property \Carbon\Carbon $deleted_at
 * @property \Go2Flow\SaasRegisterLogin\Models\User|null $owner
+* @property \Illuminate\Database\Eloquent\Collection $invitations
 * @property \Illuminate\Database\Eloquent\Collection $invoices
 * @property \Illuminate\Database\Eloquent\Collection $customers
 * @property \Illuminate\Database\Eloquent\Collection $orders
@@ -69,7 +70,7 @@ abstract class AbstractTeam extends Model
         'billing_state' => 'string',
         'billing_postal_code' => 'string',
         'billing_country' => 'string',
-        'receipt_emails' => 'string',
+        'receipt_emails' => 'array',
         'vat_id' => 'string',
         'tax_number' => 'string',
         'bank_name' => 'string',
@@ -114,6 +115,11 @@ abstract class AbstractTeam extends Model
     public function owner()
     {
         return $this->belongsTo('\Go2Flow\SaasRegisterLogin\Models\User', 'owner_id', 'id');
+    }
+    
+    public function invitations()
+    {
+        return $this->hasMany('\Go2Flow\SaasRegisterLogin\Models\Team\Invitation', 'team_id', 'id');
     }
     
     public function invoices()
