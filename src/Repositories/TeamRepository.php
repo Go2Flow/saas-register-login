@@ -3,7 +3,9 @@
 namespace Go2Flow\SaasRegisterLogin\Repositories;
 
 use Go2Flow\SaasRegisterLogin\Models\Team;
+use Go2Flow\SaasRegisterLogin\Models\Team\Invitation;
 use Go2Flow\SaasRegisterLogin\Models\User;
+use Spatie\Permission\Models\Role;
 
 class TeamRepository implements TeamRepositoryInterface
 {
@@ -25,5 +27,18 @@ class TeamRepository implements TeamRepositoryInterface
         $team = new Team($data);
         $team->save();
         return $team->refresh();
+    }
+
+    public function invite(Team $team, string $email, ?int $roleId): bool
+    {
+        if (!$roleId) {
+            $roleId = Role::where('team_id', $team->id)->first()->id;
+        }
+        $invite = new Invitation();
+        $invite->email = $email;
+        $invite->role_id = $roleId;
+        $invite->team_id = $team->id;
+        $invite->save();
+        return true;
     }
 }

@@ -5,6 +5,7 @@ namespace Go2Flow\SaasRegisterLogin\Repositories;
 use Go2Flow\SaasRegisterLogin\Models\Team;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
 class PermissionRepository implements PermissionRepositoryInterface {
 
@@ -73,6 +74,20 @@ class PermissionRepository implements PermissionRepositoryInterface {
     public function getAllPermissions() :array
     {
         return array_merge($this->basePermissions, $this->systemPermissions);
+    }
+
+    /**
+     * @param Team|null $team
+     * @return array
+     */
+    public function getRoles(?Team $team = null):array
+    {
+        if (!$team) {
+            if (!$team = Team::find(getPermissionsTeamId())) {
+                return [];
+            }
+        }
+        return Role::where('team_id', $team->id)->get()->toArray();
     }
 
 }

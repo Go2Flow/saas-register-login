@@ -36,5 +36,7 @@ Route::group([
 
         // Team
         Route::get('/team/users', [TeamController::class, 'users']);
+        Route::get('/team/roles', [TeamController::class, 'roles']);
+        Route::post('/team/{team}/invite', [TeamController::class, 'invite']);
     });
 });

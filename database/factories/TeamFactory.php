@@ -40,7 +40,7 @@ class TeamFactory extends Factory
             'billing_state' => 'Bavaria',
             'billing_postal_code' => $this->faker->postcode(),
             'billing_country' => $this->faker->countryCode(),
-            'receipt_emails' => $this->faker->unique()->safeEmail().';'.$this->faker->unique()->safeEmail(),
+            'receipt_emails' => [$this->faker->unique()->safeEmail(),$this->faker->unique()->safeEmail()],
             'vat_id' => 'DE265215028'
         ];
     }

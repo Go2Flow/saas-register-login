@@ -10,4 +10,9 @@ interface PermissionRepositoryInterface
     public function createBaseRoles(Team $team) :bool;
     public function getAllPermissions() :array;
 
+    /**
+     * @param Team|null $team
+     * @return array
+     */
+    public function getRoles(?Team $team = null) :array;
 }

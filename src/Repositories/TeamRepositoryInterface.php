@@ -13,4 +13,12 @@ interface TeamRepositoryInterface
      * @return Team
      */
     public function create(array $data, ?User $owner): Team;
+
+    /**
+     * @param Team $team
+     * @param string $email
+     * @param int|null $roleId
+     * @return bool
+     */
+    public function invite(Team $team, string $email, ?int $roleId):bool;
 }
