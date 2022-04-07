@@ -2,10 +2,9 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
-use App\Repositories\PermissionRepository;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
 use Go2Flow\SaasRegisterLogin\Models\Team;
-use Go2Flow\SaasRegisterLogin\Models\User;
+use Go2Flow\SaasRegisterLogin\Models\Team\Invitation;
 use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
 use Illuminate\Http\Request;
@@ -46,6 +45,19 @@ class TeamController extends Controller
             'email' => 'required|email',
             'role_id' => 'required',
         ]);
-        $response = $this->teamRepository->invite($team, $request->get('email'), $request->get('role_id'));
+        $success = $this->teamRepository->invite($team, $request->get('email'), $request->get('role_id'));
+        $message = 'Invite was sent.';
+        if (!$success) {
+            $message = 'Invite could not be sent.';
+        }
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+        ]);
+    }
+
+    public function pending(Team $team)
+    {
+        return Invitation::where('team_id', $team->id)->with('role')->get();
     }
 }
