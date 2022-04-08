@@ -35,9 +35,12 @@ Route::group([
         Route::get('/options/referral', [ReferralController::class, 'getReferralOptions']);
 
         // Team
-        Route::get('/team/users', [TeamController::class, 'users']);
-        Route::get('/team/roles', [TeamController::class, 'roles']);
-        Route::get('/team/{team}/pending', [TeamController::class, 'pending']);
-        Route::post('/team/{team}/invite', [TeamController::class, 'invite']);
+        Route::get('/team/users', [TeamController::class, 'users'])->middleware('auth:sanctum');
+        Route::get('/team/roles', [TeamController::class, 'roles'])->middleware('auth:sanctum');
+        Route::get('/team/{team}/pending', [TeamController::class, 'pending'])->middleware('auth:sanctum');
+        Route::post('/team/{team}/invite', [TeamController::class, 'invite'])->middleware('auth:sanctum');
+        Route::post('/team/{team}/invite/{invitation}/delete', [TeamController::class, 'inviteDelete'])->middleware('auth:sanctum');
+        Route::get('/team/{team}/invite/{invitationid}/validate/{hash}', [TeamController::class, 'inviteValidate']);
+        Route::post('/team/{team}/invite/{invitationid}/accept/{hash}', [TeamController::class, 'acceptValidate']);
     });
 });

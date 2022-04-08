@@ -19,5 +19,6 @@ Route::group([
         Route::get('password/reset/{token}', [UserController::class, 'passwortReset'])->name('password.reset');
         Route::get('/impersonate/{user}', [UserController::class, 'impersonate'])->name('impersonate');
         Route::get('/team/change/{team}', [TeamController::class, 'change']);
+        Route::get('/team/invite/{team}/{invitation}/{hash}', [TeamController::class, 'inviteAccept'])->name('srl.team.invite.accept');
     });
 });

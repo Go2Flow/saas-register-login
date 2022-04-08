@@ -38,7 +38,7 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
         );
 
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'saas-register-login');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'saas-register-login');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'srl');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
@@ -54,10 +54,9 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
                 __DIR__.'/../stubs/PermissionRepository.stub' => app_path('Repositories/PermissionRepository.php'),
             ], 'repositories');
 
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/pspserver'),
-            ], 'views');*/
+            $this->publishes([
+                __DIR__.'/../resources/views' => resource_path('views/vendor/srl'),
+            ], 'views');
 
             // Publishing assets.
             /*$this->publishes([
