@@ -138,4 +138,13 @@ class TeamController extends Controller
             'message' => $message
         ]);
     }
+
+    public function removeUser(Team $team, User $user)
+    {
+        $user->teams()->detach($team->id);
+        return response()->json([
+            'success' => true,
+            'message' => 'User was removed from the Team'
+        ]);
+    }
 }

@@ -40,6 +40,7 @@ Route::group([
         Route::get('/team/{team}/pending', [TeamController::class, 'pending'])->middleware('auth:sanctum');
         Route::post('/team/{team}/invite', [TeamController::class, 'invite'])->middleware('auth:sanctum');
         Route::post('/team/{team}/invite/{invitation}/delete', [TeamController::class, 'inviteDelete'])->middleware('auth:sanctum');
+        Route::post('/team/{team}/user/{user}/remove', [TeamController::class, 'removeUser'])->middleware('auth:sanctum');
         Route::get('/team/{team}/invite/{invitationid}/validate/{hash}', [TeamController::class, 'inviteValidate']);
         Route::post('/team/{team}/invite/{invitationid}/accept/{hash}', [TeamController::class, 'acceptValidate']);
     });
