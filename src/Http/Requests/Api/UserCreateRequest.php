@@ -2,6 +2,7 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Requests\Api;
 
+use Go2Flow\SaasRegisterLogin\Rules\ValidVatNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserCreateRequest extends FormRequest
@@ -29,7 +30,7 @@ class UserCreateRequest extends FormRequest
             'team.billing_city' => 'required',
             'team.billing_state' => 'nullable',
             'team.billing_postal_code' => 'required',
-            'team.vat_id' => 'nullable',
+            'team.vat_id' => ['nullable', 'max:225', new ValidVatNumber()],
             'team.billing_country' => 'required',
             'team.currency' => 'required',
             'team.languages' => 'required',

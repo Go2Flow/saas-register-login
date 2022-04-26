@@ -35,8 +35,12 @@ Route::group([
         Route::get('/options/referral', [ReferralController::class, 'getReferralOptions']);
 
         // Team
+        Route::get('/team', [TeamController::class, 'current'])->middleware('auth:sanctum');
+        Route::get('/teams', [TeamController::class, 'teams'])->middleware('auth:sanctum');
         Route::get('/team/users', [TeamController::class, 'users'])->middleware('auth:sanctum');
         Route::get('/team/roles', [TeamController::class, 'roles'])->middleware('auth:sanctum');
+        Route::post('/team/{team}/update/general', [TeamController::class, 'updateGeneral'])->middleware('auth:sanctum');
+        Route::post('/team/{team}/update/bank', [TeamController::class, 'updateBank'])->middleware('auth:sanctum');
         Route::get('/team/{team}/pending', [TeamController::class, 'pending'])->middleware('auth:sanctum');
         Route::post('/team/{team}/invite', [TeamController::class, 'invite'])->middleware('auth:sanctum');
         Route::post('/team/{team}/invite/{invitation}/delete', [TeamController::class, 'inviteDelete'])->middleware('auth:sanctum');

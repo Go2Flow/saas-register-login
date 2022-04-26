@@ -3,6 +3,8 @@
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
 use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
+use Go2Flow\SaasRegisterLogin\Http\Requests\Api\TeamUpdateBankRequest;
+use Go2Flow\SaasRegisterLogin\Http\Requests\Api\TeamUpdateGeneralRequest;
 use Go2Flow\SaasRegisterLogin\Http\Requests\Api\UserInviteAcceptRequest;
 use Go2Flow\SaasRegisterLogin\Http\Resources\Authenticated\UserResource;
 use Go2Flow\SaasRegisterLogin\Models\Team;
@@ -12,6 +14,7 @@ use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeamController extends Controller
 {
@@ -146,5 +149,33 @@ class TeamController extends Controller
             'success' => true,
             'message' => 'User was removed from the Team'
         ]);
+    }
+
+    public function updateGeneral(Team $team, TeamUpdateGeneralRequest $request)
+    {
+        $this->teamRepository->update($team, $request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Team was updated'
+        ]);
+    }
+
+    public function updateBank(Team $team, TeamUpdateBankRequest $request)
+    {
+        $this->teamRepository->update($team, $request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Team was updated'
+        ]);
+    }
+
+    public function current()
+    {
+        return Auth::user()->teams()->where('id', '=', getSaasTeamId())->first();
+    }
+
+    public function teams()
+    {
+        return Auth::user()->teams;
     }
 }

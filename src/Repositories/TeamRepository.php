@@ -7,6 +7,7 @@ use Go2Flow\SaasRegisterLogin\Models\Team;
 use Go2Flow\SaasRegisterLogin\Models\Team\Invitation;
 use Go2Flow\SaasRegisterLogin\Models\User;
 use Illuminate\Support\Facades\Mail;
+use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Spatie\Permission\Models\Role;
 
 class TeamRepository implements TeamRepositoryInterface
@@ -48,5 +49,24 @@ class TeamRepository implements TeamRepositoryInterface
 
         Mail::to($email)->send(new InvitationMail($invite, app()->getLocale()));
         return true;
+    }
+
+    /**
+     * @param Team $team
+     * @param array $data
+     * @return Team
+     */
+    public function update(Team $team, array $data): Team
+    {
+        if (
+            isset($data['owner_id'])
+            && $team->owner_id != $data['owner_id']
+            && auth()->user()->id !== $team->owner_id
+        ) {
+            unset($data['owner_id']);
+        }
+        $team->fill($data);
+        $team->save();
+        return $team->refresh();
     }
 }

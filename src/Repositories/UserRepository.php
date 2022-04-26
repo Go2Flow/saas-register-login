@@ -54,9 +54,11 @@ class UserRepository implements UserRepositoryInterface
      */
     public function addUserToTeam(User $user, Invitation $invite):void
     {
-        $user->teams()->attach($invite->team_id);
-        $role = Role::find($invite->role_id);
-        $user->assignRole($role);
+        if (!$user->teams()->where('id', $invite->team_id)->first()) {
+            $user->teams()->attach($invite->team_id);
+            $role = Role::find($invite->role_id);
+            $user->assignRole($role);
+        }
         $invite->delete();
     }
 }
