@@ -29,7 +29,19 @@ class TeamRepository implements TeamRepositoryInterface
         $data['psp_id'] = uniqid(); // @TODO: hook into psp service to get a real id
         $team = new Team($data);
         $team->save();
-        return $team->refresh();
+        $team->refresh();
+        app(PermissionRepositoryInterface::class)->createBaseRoles($team);
+        if ($owner) {
+            $role = Role::query()
+                ->where('name', PermissionRepositoryInterface::ROLE_ADMIN_NAME)
+                ->where('team_id', $team->id)
+                ->first();
+            if ($role) {
+                setPermissionsTeamId($team->id);
+                $owner->assignRole($role);
+            }
+        }
+        return $team;
     }
 
     public function invite(Team $team, string $email, ?int $roleId): bool
@@ -61,9 +73,23 @@ class TeamRepository implements TeamRepositoryInterface
         if (
             isset($data['owner_id'])
             && $team->owner_id != $data['owner_id']
-            && auth()->user()->id !== $team->owner_id
         ) {
-            unset($data['owner_id']);
+            if (auth()->user()->id !== $team->owner_id) {
+                unset($data['owner_id']);
+            } else {
+                /** @var User $newOwner */
+                $newOwner = User::find($data['owner_id']);
+                $role = Role::query()
+                    ->where('name', PermissionRepositoryInterface::ROLE_ADMIN_NAME)
+                    ->where('team_id', $team->id)
+                    ->first();
+                if ($newOwner && $role) {
+                    setPermissionsTeamId($team->id);
+                    $newOwner->syncRoles($role);
+                } else {
+                    unset($data['owner_id']);
+                }
+            }
         }
         $team->fill($data);
         $team->save();
