@@ -3,6 +3,7 @@
 namespace Go2Flow\SaasRegisterLogin;
 
 use App\Repositories\PermissionRepository;
+use Go2Flow\SaasRegisterLogin\Console\Team\DeleteOldInvites;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\TeamsPermission;
 use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepository;
@@ -69,7 +70,7 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
             ], 'lang');*/
 
             // Registering package commands.
-            // $this->commands([]);
+            $this->commands([DeleteOldInvites::class]);
         }
     }
 

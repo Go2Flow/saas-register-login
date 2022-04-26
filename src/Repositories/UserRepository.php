@@ -57,6 +57,7 @@ class UserRepository implements UserRepositoryInterface
         if (!$user->teams()->where('id', $invite->team_id)->first()) {
             $user->teams()->attach($invite->team_id);
             $role = Role::find($invite->role_id);
+            setPermissionsTeamId($invite->team_id);
             $user->assignRole($role);
         }
         $invite->delete();
