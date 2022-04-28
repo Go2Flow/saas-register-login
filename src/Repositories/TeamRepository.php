@@ -28,42 +28,12 @@ class TeamRepository implements TeamRepositoryInterface
             $data['owner_id'] = $owner->id;
             $data['email'] = $data['email'] ?? $owner->email;
         }
+        $lang = $data['languages'];
         if (is_string($data['languages'])) {
             $data['languages'] = [$data['languages']];
         }
-        $data['psp_id'] = uniqid(); // @TODO: hook into psp service to get a real id
 
-        $psp = new G2FApiService();
-        $merchant = new Merchant();
-        $personal = new Personal();
-
-        $personal->setAddress($data['billing_address'])
-            ->setCity($data['billing_city'])
-            ->setZip($data['billing_zip'])
-            ->setCompany($data['billing_company'])
-            ->setCountry($data['billing_country'])
-            ->setZip($data['billing_postal_code'])
-            ->setFirstName($data['firstname'])
-            ->setLastName($data['lastname'])
-            ->setEmployees(Constants::EMPLOYEE[1])
-            ->setFieldOfCompetence(Constants::COMPETENCE[1])
-            ->setBusiness(Constants::BUSINESS[1])
-            ->setLegalForm(Constants::LEGAL_FORM[1])
-            ->setPhoneNumber('01737193481')
-            ->setPhonePrefix('+49')
-            ->setSalutation($data['salutation'])
-            ->setVatNr($data['vat_id']);
-
-        $merchant
-            ->setEmail($data['team_name'])
-            ->setMerchantData($personal)
-            ->setSubdomain(Str::slug($data['']))
-            ->setReference('courzly_'.env('APP_ENV'))
-            ->setLanguage( $data['languages'])
-            ->setActivatePSP36(true)
-            ->setSendWelcomeMail(true);
-
-        $psp->createMerchant($merchant);
+        $data['psp_id'] = $this->createPspMerchant($data, $owner, $lang);
 
         $team = new Team($data);
         $team->save();
@@ -132,5 +102,46 @@ class TeamRepository implements TeamRepositoryInterface
         $team->fill($data);
         $team->save();
         return $team->refresh();
+    }
+
+    /**
+     * @param array $data
+     * @param User|null $owner
+     * @param mixed $lang
+     * @return string|null
+     */
+    private function createPspMerchant(array $data, ?User $owner, mixed $lang): string|null
+    {
+        $psp = new G2FApiService();
+        $merchant = new Merchant();
+        $personal = new Personal();
+
+        if(env('APP_ENV') == 'production') {
+            $personal
+                ->setCompany($data['name'])
+                ->setAddress($data['billing_address'])
+                ->setCity($data['billing_city'])
+                ->setCountry($data['billing_country'])
+                ->setZip($data['billing_postal_code'])
+                ->setSalutation($owner->salutation)
+                ->setFirstName($owner->firstname)
+                ->setLastName($owner->lastname)
+                ->setVatNr($data['vat_id']);
+            //->setPhoneNumber('01737193481')
+            //->setPhonePrefix('+49')
+
+            $merchant
+                ->setEmail($data['email'])
+                ->setMerchantData($personal)
+                ->setSubdomain('courzly-' . uniqid() . '-' . Str::slug($data['name']))
+                ->setReference('courzly-' . env('APP_ENV'))
+                ->setLanguage($lang)
+                ->setActivatePSP36(true)
+                ->setSendWelcomeMail(true);
+
+            return $psp->createMerchant($merchant);
+        } else {
+            return '4053261b';
+        }
     }
 }

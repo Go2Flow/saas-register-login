@@ -18,7 +18,7 @@ class UserCreateRequest extends FormRequest
             'user.salutation' => 'required',
             'user.firstname' => 'required',
             'user.lastname' => 'required',
-            'user.email' => 'required',
+            'user.email' => 'required|unique:Go2Flow\SaasRegisterLogin\Models\User,email',
             'user.password' => 'required|min:8',
             'user.password_confirm' => 'required|same:user.password',
             'user.referral_id' => 'required',

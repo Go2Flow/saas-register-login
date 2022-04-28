@@ -14,7 +14,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
@@ -38,18 +40,41 @@ class UserController extends Controller
     public function register(UserCreateRequest $request)
     {
         try {
-            $user = $this->userRepository->create($request->get('user'));
-            $team = $this->teamRepository->create($request->get('team'), $user);
-            $user->teams()->attach($team->id);
+
+            $user = DB::transaction(function () use ($request) {
+                $user = $this->userRepository->create($request->get('user'));
+                $team = $this->teamRepository->create($request->get('team'), $user);
+                $user->teams()->attach($team->id);
+
+                event(new Registered($user));
+
+                return $user;
+            });
 
             $success = true;
             $message = 'User register successfully';
 
-            event(new Registered($user));
         } catch (\Illuminate\Database\QueryException $ex) {
             $user = null;
             $success = false;
-            $message = $ex->getMessage();
+            $message = 'A technichal problem occoured, your team is informed. Please try again in 30min.';
+
+            Log::error($ex->getMessage(), [
+                'File' => __FILE__,
+                'Line' => $ex->getLine(),
+                'SQL' => $ex->getSql(),
+                'Bindings' => $ex->getBindings()
+            ]);
+        } catch (\Exception $ex) {
+            $user = null;
+            $success = false;
+            $message = 'A technichal problem occoured, your team is informed. Please try again in 30min.';
+
+            Log::error($ex->getMessage(), [
+                'File' => __FILE__,
+                'Line' => $ex->getLine(),
+                'Trace' => $ex->getTrace()
+            ]);
         }
 
         // response
