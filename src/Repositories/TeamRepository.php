@@ -2,11 +2,16 @@
 
 namespace Go2Flow\SaasRegisterLogin\Repositories;
 
+use Go2Flow\PSPClient\Services\Go2FlowFinance\Constants;
+use Go2Flow\PSPClient\Services\Go2FlowFinance\G2FApiService;
+use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Merchant;
+use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Personal;
 use Go2Flow\SaasRegisterLogin\Mail\Invitation as InvitationMail;
 use Go2Flow\SaasRegisterLogin\Models\Team;
 use Go2Flow\SaasRegisterLogin\Models\Team\Invitation;
 use Go2Flow\SaasRegisterLogin\Models\User;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Spatie\Permission\Models\Role;
 
@@ -27,6 +32,39 @@ class TeamRepository implements TeamRepositoryInterface
             $data['languages'] = [$data['languages']];
         }
         $data['psp_id'] = uniqid(); // @TODO: hook into psp service to get a real id
+
+        $psp = new G2FApiService();
+        $merchant = new Merchant();
+        $personal = new Personal();
+
+        $personal->setAddress($data['billing_address'])
+            ->setCity($data['billing_city'])
+            ->setZip($data['billing_zip'])
+            ->setCompany($data['billing_company'])
+            ->setCountry($data['billing_country'])
+            ->setZip($data['billing_postal_code'])
+            ->setFirstName($data['firstname'])
+            ->setLastName($data['lastname'])
+            ->setEmployees(Constants::EMPLOYEE[1])
+            ->setFieldOfCompetence(Constants::COMPETENCE[1])
+            ->setBusiness(Constants::BUSINESS[1])
+            ->setLegalForm(Constants::LEGAL_FORM[1])
+            ->setPhoneNumber('01737193481')
+            ->setPhonePrefix('+49')
+            ->setSalutation($data['salutation'])
+            ->setVatNr($data['vat_id']);
+
+        $merchant
+            ->setEmail($data['team_name'])
+            ->setMerchantData($personal)
+            ->setSubdomain(Str::slug($data['']))
+            ->setReference('courzly_'.env('APP_ENV'))
+            ->setLanguage( $data['languages'])
+            ->setActivatePSP36(true)
+            ->setSendWelcomeMail(true);
+
+        $psp->createMerchant($merchant);
+
         $team = new Team($data);
         $team->save();
         $team->refresh();
