@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
 * @property bigInteger $owner_id
 * @property string $name
 * @property string $email
+* @property string $phone_prefix
+* @property string $phone_number
 * @property string $currency
 * @property json $languages
 * @property string $extra_billing_information
@@ -61,6 +63,8 @@ abstract class AbstractTeam extends Model
         'owner_id' => 'integer',
         'name' => 'string',
         'email' => 'string',
+        'phone_prefix' => 'string',
+        'phone_number' => 'string',
         'currency' => 'string',
         'languages' => 'array',
         'extra_billing_information' => 'string',
@@ -92,6 +96,8 @@ abstract class AbstractTeam extends Model
         'owner_id',
         'name',
         'email',
+        'phone_prefix',
+        'phone_number',
         'currency',
         'languages',
         'extra_billing_information',
