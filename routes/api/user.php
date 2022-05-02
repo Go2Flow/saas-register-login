@@ -15,6 +15,7 @@ Route::get('/teams', [TeamController::class, 'teams']);
 Route::get('/team/users', [TeamController::class, 'users']);
 Route::get('/team/roles', [TeamController::class, 'roles']);
 
+Route::post('/team/create', [TeamController::class, 'create']);
 Route::post('/team/{team}/update/general', [TeamController::class, 'updateGeneral']);
 Route::post('/team/{team}/update/bank', [TeamController::class, 'updateBank']);
 Route::post('/team/{team}/invite', [TeamController::class, 'invite']);

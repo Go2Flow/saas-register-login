@@ -3,6 +3,7 @@
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
 use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
+use Go2Flow\SaasRegisterLogin\Http\Requests\Api\TeamCreateRequest;
 use Go2Flow\SaasRegisterLogin\Http\Requests\Api\TeamUpdateBankRequest;
 use Go2Flow\SaasRegisterLogin\Http\Requests\Api\TeamUpdateGeneralRequest;
 use Go2Flow\SaasRegisterLogin\Http\Requests\Api\UserInviteAcceptRequest;
@@ -213,5 +214,16 @@ class TeamController extends Controller
     {
         $team->tokens()->where('id', $tokenId)->delete();
         return ['success' => true];
+    }
+
+    public function create(TeamCreateRequest $request)
+    {
+        $team = $this->teamRepository->create($request->all(), auth()->user());
+        setSaasTeamId($team->id);
+        setPermissionsTeamId($team->id);
+        return response()->json([
+            'success' => true,
+            'message' => 'Team was created'
+        ]);
     }
 }
