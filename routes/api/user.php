@@ -23,6 +23,6 @@ Route::post('/team/{team}/invite/{invitation}/delete', [TeamController::class, '
 Route::post('/team/{team}/user/{user}/remove', [TeamController::class, 'removeUser']);
 
 // Team API Tokens
-Route::post('/team/{team}/tokens/list', [TeamController::class, 'createToken']);
-Route::post('/team/{team}/tokens/create/', [TeamController::class, 'createToken']);
-Route::delete('/team/{team}/tokens/delete/{tokenId}', [TeamController::class, 'deleteToken']);
+Route::post('/team/{team}/tokens/create', [TeamController::class, 'createToken']);
+Route::get('/team/{team}/tokens/list', [TeamController::class, 'listTokens']);
+Route::post('/team/{team}/tokens/delete/{tokenId}', [TeamController::class, 'deleteToken']);

@@ -15,6 +15,7 @@ use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class TeamController extends Controller
 {
@@ -179,12 +180,35 @@ class TeamController extends Controller
         return Auth::user()->teams;
     }
 
-    public function createToken(Team $team)
+    /**
+     * @param Team $team
+     * @return mixed
+     */
+    public function listTokens(Team $team)
     {
-        $token = $team->createToken(\Illuminate\Support\Str::slug($team->name).'_token');
-        return ['token' => $token->plainTextToken];
+        return $team->tokens;
     }
 
+    /**
+     * @param Team $team
+     * @return array
+     */
+    public function createToken(Team $team)
+    {
+        $accessToken = $team->createToken(\request()->get('token_name'));
+
+        $token = PersonalAccessToken::findToken($accessToken->plainTextToken);
+        $token->plain_text_token = $accessToken->plainTextToken;
+        $token->save();
+
+        return ['token' => $accessToken->plainTextToken];
+    }
+
+    /**
+     * @param Team $team
+     * @param $tokenId
+     * @return bool[]
+     */
     public function deleteToken(Team $team, $tokenId)
     {
         $team->tokens()->where('id', $tokenId)->delete();
