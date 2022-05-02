@@ -178,4 +178,16 @@ class TeamController extends Controller
     {
         return Auth::user()->teams;
     }
+
+    public function createToken(Team $team)
+    {
+        $token = $team->createToken(\Illuminate\Support\Str::slug($team->name).'_token');
+        return ['token' => $token->plainTextToken];
+    }
+
+    public function deleteToken(Team $team, $tokenId)
+    {
+        $team->tokens()->where('id', $tokenId)->delete();
+        return ['success' => true];
+    }
 }

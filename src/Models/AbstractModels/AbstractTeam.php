@@ -49,12 +49,12 @@ use Illuminate\Database\Eloquent\Model;
 * @property \Illuminate\Database\Eloquent\Collection $locations
 * @property \Illuminate\Database\Eloquent\Collection $type_sets
 * @property \Illuminate\Database\Eloquent\Collection $taxes
-*/ 
+*/
 abstract class AbstractTeam extends Model
 {
-    /**  
+    /**
      * The attributes that should be cast to native types.
-     * 
+     *
      * @var array
      */
     protected $casts = [
@@ -84,10 +84,10 @@ abstract class AbstractTeam extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
     ];
-    
-    /**  
+
+    /**
      * The attributes that are mass assignable.
-     * 
+     *
      * @var array
      */
     protected $fillable = [
@@ -117,72 +117,72 @@ abstract class AbstractTeam extends Model
         'updated_at',
         'deleted_at'
     ];
-    
+
     public function owner()
     {
         return $this->belongsTo('\Go2Flow\SaasRegisterLogin\Models\User', 'owner_id', 'id');
     }
-    
+
     public function invitations()
     {
         return $this->hasMany('\Go2Flow\SaasRegisterLogin\Models\Team\Invitation', 'team_id', 'id');
     }
-    
+
     public function invoices()
     {
         return $this->hasMany('\App\Models\Invoice', 'team_id', 'id');
     }
-    
+
     public function customers()
     {
         return $this->hasMany('\App\Models\Customer', 'team_id', 'id');
     }
-    
+
     public function orders()
     {
         return $this->hasMany('\App\Models\Order\Order', 'team_id', 'id');
     }
-    
+
     public function courses()
     {
         return $this->hasMany('\App\Models\Course\Course', 'team_id', 'id');
     }
-    
+
     public function attributes()
     {
         return $this->hasMany('\App\Models\Course\Attribute\Group', 'team_id', 'id');
     }
-    
+
     public function fields()
     {
         return $this->hasMany('\App\Models\Course\Field\Group', 'team_id', 'id');
     }
-    
+
     public function options()
     {
         return $this->hasMany('\App\Models\Course\Option', 'team_id', 'id');
     }
-    
+
     public function locations()
     {
         return $this->hasMany('\App\Models\Course\Location', 'team_id', 'id');
     }
-    
+
     public function type_sets()
     {
         return $this->hasMany('\App\Models\Course\Type\Set', 'team_id', 'id');
     }
-    
+
     public function taxes()
     {
         return $this->hasMany('\App\Models\Tax', 'team_id', 'id');
     }
-    
+
     public function users()
     {
         return $this->belongsToMany('\Go2Flow\SaasRegisterLogin\Models\User', 'team_user', 'team_id', 'user_id');
     }
-    
+
     public function layouts()
     {
         return $this->belongsToMany('\Go2Flow\SaasRegisterLogin\Models\Layouts', 'team_layouts', 'team_id', 'layouts_id')->withPivot('custom_css', 'primary_color', 'secondary_color');

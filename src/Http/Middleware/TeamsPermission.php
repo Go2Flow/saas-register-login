@@ -2,11 +2,14 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Middleware;
 
+use Go2Flow\SaasRegisterLogin\Models\User;
+
 class TeamsPermission {
 
     public function handle($request, \Closure $next)
     {
-        if(!empty(auth()->user())){
+
+        if(!empty(auth()->user()) && auth()->user() instanceof User){
             if (getSaasTeamId() === null) {
                 setSaasTeamId(auth()->user()->teams->first()->id);
             }

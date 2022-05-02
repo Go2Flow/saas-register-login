@@ -14,38 +14,14 @@ Route::group([
 ], function () {
 
     Route::group(['middleware' => ['api'], 'prefix' => 'srl'], function () {
+        include_once 'api/public.php';
+    });
 
-        Route::post('login', [UserController::class, 'login']);
-        Route::post('register', [UserController::class, 'register']);
-        Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
-        Route::post('/email/verify/resend/{user}', [UserController::class, 'resend'])->name('verification.resend');
-        Route::post('/password/reset/mail', [UserController::class, 'sendResetPasswordMail'])->name('password.reset.send');
-        Route::post('/password/reset/submit', [UserController::class, 'passwordResetSave'])->name('password.reset.save');
+    Route::group(['middleware' => ['api', 'auth:sanctum', 'auth-is-user'], 'prefix' => 'srl'], function () {
+        include_once 'api/user.php';
+    });
 
-        Route::get('/permission/{permissionName}', [PermissionController::class, 'check'])->middleware('auth:sanctum');
-
-        Route::post('/validator/vat_id', [ValidationController::class, 'validateVatId']);
-        Route::post('/validator/country', [ValidationController::class, 'validateCountry']);
-
-        // WorldCountryCurrency START
-        Route::get('/options/country', [WorldCountryCurrencyController::class, 'getCountryOptions']);
-        Route::get('/options/currency', [WorldCountryCurrencyController::class, 'getCurrencyOptions']);
-        Route::get('/options/language', [WorldCountryCurrencyController::class, 'getLanguageOptions']);
-        // WorldCountryCurrency END
-        Route::get('/options/referral', [ReferralController::class, 'getReferralOptions']);
-
-        // Team
-        Route::get('/team', [TeamController::class, 'current'])->middleware('auth:sanctum');
-        Route::get('/teams', [TeamController::class, 'teams'])->middleware('auth:sanctum');
-        Route::get('/team/users', [TeamController::class, 'users'])->middleware('auth:sanctum');
-        Route::get('/team/roles', [TeamController::class, 'roles'])->middleware('auth:sanctum');
-        Route::post('/team/{team}/update/general', [TeamController::class, 'updateGeneral'])->middleware('auth:sanctum');
-        Route::post('/team/{team}/update/bank', [TeamController::class, 'updateBank'])->middleware('auth:sanctum');
-        Route::get('/team/{team}/pending', [TeamController::class, 'pending'])->middleware('auth:sanctum');
-        Route::post('/team/{team}/invite', [TeamController::class, 'invite'])->middleware('auth:sanctum');
-        Route::post('/team/{team}/invite/{invitation}/delete', [TeamController::class, 'inviteDelete'])->middleware('auth:sanctum');
-        Route::post('/team/{team}/user/{user}/remove', [TeamController::class, 'removeUser'])->middleware('auth:sanctum');
-        Route::get('/team/{team}/invite/{invitationid}/validate/{hash}', [TeamController::class, 'inviteValidate']);
-        Route::post('/team/{team}/invite/{invitationid}/accept/{hash}', [TeamController::class, 'acceptValidate']);
+    Route::group(['middleware' => ['api', 'auth:sanctum', 'auth-is-team'], 'prefix' => 'srl'], function () {
+        include_once 'api/team.php';
     });
 });

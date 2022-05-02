@@ -4,6 +4,8 @@ namespace Go2Flow\SaasRegisterLogin;
 
 use App\Repositories\PermissionRepository;
 use Go2Flow\SaasRegisterLogin\Console\Team\DeleteOldInvites;
+use Go2Flow\SaasRegisterLogin\Http\Middleware\AuthIsBackendUser;
+use Go2Flow\SaasRegisterLogin\Http\Middleware\AuthIsEmbedTeam;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\TeamsPermission;
 use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepository;
@@ -21,6 +23,8 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
     public function boot(Router $router)
     {
         $router->middlewareGroup('TeamPermission', [TeamsPermission::class]);
+        $router->aliasMiddleware('auth-is-user', AuthIsBackendUser::class);
+        $router->aliasMiddleware('auth-is-team', AuthIsEmbedTeam::class);
 
         /*
          * Optional methods to load your package assets

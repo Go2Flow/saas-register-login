@@ -22,6 +22,7 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+
     private UserRepositoryInterface $userRepository;
     private TeamRepositoryInterface $teamRepository;
 
