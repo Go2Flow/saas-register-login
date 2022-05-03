@@ -40,6 +40,7 @@ class TeamRepository implements TeamRepositoryInterface
         $team->refresh();
         app(PermissionRepositoryInterface::class)->createBaseRoles($team);
         if ($owner) {
+            $owner->teams()->syncWithoutDetaching([$team->id]);
             $role = Role::query()
                 ->where('name', PermissionRepositoryInterface::ROLE_ADMIN_NAME)
                 ->where('team_id', $team->id)

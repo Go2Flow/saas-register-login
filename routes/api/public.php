@@ -14,8 +14,11 @@ Route::post('/email/verify/resend/{user}', [UserController::class, 'resend'])->n
 Route::post('/password/reset/mail', [UserController::class, 'sendResetPasswordMail'])->name('password.reset.send');
 Route::post('/password/reset/submit', [UserController::class, 'passwordResetSave'])->name('password.reset.save');
 
+// Validators
 Route::post('/validator/vat_id', [ValidationController::class, 'validateVatId']);
 Route::post('/validator/country', [ValidationController::class, 'validateCountry']);
+Route::post('/validator/unique/team/name', [ValidationController::class, 'validateUniqueTeamName']);
+Route::post('/validator/unique/user/email', [ValidationController::class, 'validateUniqueUserEmail']);
 
 // WorldCountryCurrency START
 Route::get('/options/country', [WorldCountryCurrencyController::class, 'getCountryOptions']);

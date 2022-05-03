@@ -16,6 +16,8 @@ class TeamUpdateGeneralRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email',
+            'phone_prefix' => ['required', 'max:5'],
+            'phone_number' => ['required', 'max:50'],
             'owner_id' => 'required',
             'receipt_emails.*' => 'email',
             'billing_address' => 'required',

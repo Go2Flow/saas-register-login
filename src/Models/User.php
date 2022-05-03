@@ -13,7 +13,7 @@ class User extends AbstractUser implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    protected $guard_name = 'web';
+    protected $guard_name = 'sanctum';
 
     /**
      * The attributes that should be hidden for serialization.

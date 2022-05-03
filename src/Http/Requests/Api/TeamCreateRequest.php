@@ -16,7 +16,7 @@ class TeamCreateRequest extends FormRequest
     {
         return [
             'email' => 'required',
-            'name' => 'required',
+            'name' => 'required|unique:Go2Flow\SaasRegisterLogin\Models\Team,name',
             'billing_address' => 'required',
             'billing_address_line_2' => 'nullable',
             'billing_city' => 'required',
@@ -26,6 +26,8 @@ class TeamCreateRequest extends FormRequest
             'billing_country' => 'required',
             'currency' => 'required',
             'languages' => 'required',
+            'phone_prefix' => ['required', 'max:5'],
+            'phone_number' => ['required', 'max:50'],
         ];
     }
 }

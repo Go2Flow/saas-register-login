@@ -28,4 +28,20 @@ class ValidationController extends Controller
         ]);
         return true;
     }
+
+    public function validateUniqueTeamName(Request $request)
+    {
+        $request->validate([
+            'name' => ['unique:Go2Flow\SaasRegisterLogin\Models\Team,name']
+        ]);
+        return true;
+    }
+
+    public function validateUniqueUserEmail(Request $request)
+    {
+        $request->validate([
+            'email' => ['unique:Go2Flow\SaasRegisterLogin\Models\User,email']
+        ]);
+        return true;
+    }
 }

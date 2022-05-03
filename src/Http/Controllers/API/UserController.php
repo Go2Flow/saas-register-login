@@ -44,8 +44,7 @@ class UserController extends Controller
 
             $user = DB::transaction(function () use ($request) {
                 $user = $this->userRepository->create($request->get('user'));
-                $team = $this->teamRepository->create($request->get('team'), $user);
-                $user->teams()->attach($team->id);
+                $this->teamRepository->create($request->get('team'), $user);
 
                 event(new Registered($user));
 
@@ -99,7 +98,7 @@ class UserController extends Controller
         ];
         /** @var User $user */
         $user = User::whereEmail($request->email)->first();
-        $authResult = Auth::attempt($credentials);
+        $authResult = auth('web')->attempt($credentials);
         $needVerification = false;
         $success = false;
         if (!$user) {
