@@ -12,7 +12,10 @@ class TeamsPermission {
 
         if(!empty(auth()->user()) && auth()->user() instanceof User){
             if (getSaasTeamId() === null) {
-                setSaasTeamId(auth()->user()->teams->first()->id);
+                $team = auth()->user()->teams->first();
+                if ($team) {
+                    setSaasTeamId($team->id);
+                }
             }
             // session value set on login
             setPermissionsTeamId(session('team_id'));

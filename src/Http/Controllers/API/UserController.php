@@ -106,7 +106,10 @@ class UserController extends Controller
         } elseif ($authResult && $user->hasVerifiedEmail()) {
             $success = true;
             $message = 'User login successfully';
-            setSaasTeamId(auth()->user()->teams->first()->id);
+            $team = auth()->user()->teams->first();
+            if ($team) {
+                setSaasTeamId($team->id);
+            }
         } elseif (!$user->hasVerifiedEmail() && $authResult) {
             $needVerification = $user->id;
             $message = 'Your E-Mail-Address is not verified!';
