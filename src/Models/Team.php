@@ -33,7 +33,8 @@ class Team extends \Go2Flow\SaasRegisterLogin\Models\AbstractModels\AbstractTeam
     {
         $this
             ->addMediaConversion(self::MEDIA_CONVERSION_LOGO)
-            ->fit(Manipulations::FIT_FILL, 1000, 320)
+            ->width(250)
+            ->height(250)
             ->nonQueued()->performOnCollections(self::MEDIA_LOGO);
     }
 }
