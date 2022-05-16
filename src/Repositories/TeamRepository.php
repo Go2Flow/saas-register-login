@@ -33,7 +33,8 @@ class TeamRepository implements TeamRepositoryInterface
             $data['languages'] = [$data['languages']];
         }
 
-        $data['psp_id'] = $this->createPspMerchant($data, $owner, $lang);
+        $data['psp_instance'] = $this->createPSPInstanceName($data['name'], uniqid());
+        $data['psp_id'] = $this->createPspMerchant($data, $owner, $lang, $data['psp_instance']);
 
         $team = new Team($data);
         $team->save();
@@ -111,7 +112,7 @@ class TeamRepository implements TeamRepositoryInterface
      * @param mixed $lang
      * @return string|null
      */
-    private function createPspMerchant(array $data, ?User $owner, mixed $lang): string|null
+    private function createPspMerchant(array $data, ?User $owner, mixed $lang, $instanceName): string|null
     {
         $psp = new G2FApiService();
         $merchant = new Merchant();
@@ -127,22 +128,31 @@ class TeamRepository implements TeamRepositoryInterface
                 ->setSalutation($owner->salutation)
                 ->setFirstName($owner->firstname)
                 ->setLastName($owner->lastname)
-                ->setVatNr($data['vat_id']);
-            //->setPhoneNumber('01737193481')
-            //->setPhonePrefix('+49')
+                ->setVatNr($data['vat_id'])
+                ->setPhoneNumber($data['phone_number'])
+                ->setPhonePrefix($data['phone_prefix']);
 
             $merchant
                 ->setEmail($data['email'])
                 ->setMerchantData($personal)
-                ->setSubdomain('courzly-' . uniqid() . '-' . Str::slug($data['name']))
+                ->setSubdomain($instanceName)
                 ->setReference('courzly-' . env('APP_ENV'))
                 ->setLanguage($lang)
                 ->setActivatePSP36(true)
-                ->setSendWelcomeMail(true);
+                ->setSendWelcomeMail(false);
 
             return $psp->createMerchant($merchant);
         } else {
             return '4053261b';
+        }
+    }
+
+    public function createPSPInstanceName($name, $unique)
+    {
+        if(env('APP_ENV') == 'production') {
+            return 'courzly-' . $unique . '-' . Str::slug($name);
+        } else {
+            return 'courzly-dev';
         }
     }
 }
