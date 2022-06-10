@@ -17,7 +17,8 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $data = parent::toArray($request);
-        $data['role'] = new RoleResource($this->whenLoaded('roles')->first());
+        $roles = $this->whenLoaded('roles');
+        $data['role'] = new RoleResource($roles->isMissing()?$roles:$roles->first());
         $this->unsetData($data);
         return $data;
     }
