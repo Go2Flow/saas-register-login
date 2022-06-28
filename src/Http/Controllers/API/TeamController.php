@@ -38,7 +38,7 @@ class TeamController extends Controller
     {
         $team = currentTeam();
         if ($team) {
-            return UserResource::collection(currentTeam()->users->load('roles'));
+            return UserResource::collection($team->users->load('roles'));
         }
         abort('401', 'Unauthenticated');
     }

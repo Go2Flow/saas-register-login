@@ -18,7 +18,9 @@ class UserResource extends JsonResource
     {
         $data = parent::toArray($request);
         $roles = $this->whenLoaded('roles');
-        $data['role'] = new RoleResource($roles->isMissing()?$roles:$roles->first());
+        if (!method_exists($roles, 'isMissing')) {
+            $data['role'] = new RoleResource($roles->first());
+        }
         $this->unsetData($data);
         return $data;
     }
