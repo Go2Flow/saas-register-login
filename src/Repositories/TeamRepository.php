@@ -6,6 +6,7 @@ use Go2Flow\PSPClient\Services\Go2FlowFinance\Constants;
 use Go2Flow\PSPClient\Services\Go2FlowFinance\G2FApiService;
 use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Merchant;
 use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Personal;
+use Go2Flow\SaasRegisterLogin\Events\TeamCreated;
 use Go2Flow\SaasRegisterLogin\Mail\Invitation as InvitationMail;
 use Go2Flow\SaasRegisterLogin\Models\Team;
 use Go2Flow\SaasRegisterLogin\Models\Team\Invitation;
@@ -51,6 +52,7 @@ class TeamRepository implements TeamRepositoryInterface
                 $owner->assignRole($role);
             }
         }
+        event(new TeamCreated($team));
         return $team;
     }
 
