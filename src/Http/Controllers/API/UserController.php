@@ -113,7 +113,7 @@ class UserController extends Controller
         } elseif (!$user->hasVerifiedEmail() && $authResult) {
             $needVerification = $user->id;
             $message = 'Your E-Mail-Address is not verified!';
-            auth()->logout();
+            auth('web')->logout();
         } else {
             $message = 'Wrong password or e-mail-address!';
         }
@@ -185,7 +185,7 @@ class UserController extends Controller
             event(new Verified($user));
         }
 
-        Auth::login($user);
+        auth('web')->login($user);
         setSaasTeamId($user->teams->first()->id);
 
         return $request->wantsJson()
