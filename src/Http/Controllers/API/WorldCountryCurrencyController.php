@@ -49,7 +49,6 @@ class WorldCountryCurrencyController extends Controller
             }
             return $options;
         }
-        dd($action);
         return response('', 404);
     }
 }
