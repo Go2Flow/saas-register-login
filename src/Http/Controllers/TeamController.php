@@ -28,7 +28,7 @@ class TeamController extends Controller
     public function inviteAccept(Team $team, int $invitation, string $hash)
     {
         if (auth()->user()) {
-            Auth::logout();
+            auth()->logout();
         }
         return redirect($this->localizeUrl('/accept-invite/'.$team->id.'/'.$invitation.'/'.$hash));
     }
