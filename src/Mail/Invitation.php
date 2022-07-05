@@ -13,6 +13,8 @@ class Invitation extends Mailable
 
     public InvitationModel $invitation;
     public string $acceptUrl;
+    public int $team_id;
+    public bool $loggable = true;
 
     public function __construct(
         InvitationModel $invitation,
@@ -20,6 +22,7 @@ class Invitation extends Mailable
     ) {
         $this->invitation = $invitation;
         $this->locale = $locale;
+        $this->team_id = $invitation->team_id;
     }
 
     public function build()
