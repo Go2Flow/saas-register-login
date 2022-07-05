@@ -106,7 +106,7 @@ class UserController extends Controller
         } elseif ($authResult && $user->hasVerifiedEmail()) {
             $success = true;
             $message = 'User login successfully';
-            $team = auth()->user()->teams->first();
+            $team = auth('web')->user()->teams->first();
             if ($team) {
                 setSaasTeamId($team->id);
             }
@@ -221,7 +221,7 @@ class UserController extends Controller
             abort(401);
         }
 
-        Auth::login($user);
+        auth('web')->login($user);
         setSaasTeamId($user->teams->first()->id);
         return $request->wantsJson()
             ? new JsonResponse([], 204)
@@ -279,7 +279,7 @@ class UserController extends Controller
             if (!$user->hasVerifiedEmail() && $user->markEmailAsVerified()) {
                 event(new Verified($user));
             }
-            Auth::login($user);
+            auth('web')->login($user);
             setSaasTeamId($user->teams->first()->id);
         }
         return new JsonResponse([
