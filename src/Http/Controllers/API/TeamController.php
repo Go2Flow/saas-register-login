@@ -2,6 +2,7 @@
 
 namespace Go2Flow\SaasRegisterLogin\Http\Controllers\API;
 
+use Go2Flow\SaasRegisterLogin\Events\RemoveUserFromTeam;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\Controller;
 use Go2Flow\SaasRegisterLogin\Http\Requests\Api\TeamCreateRequest;
 use Go2Flow\SaasRegisterLogin\Http\Requests\Api\TeamUpdateBankRequest;
@@ -144,9 +145,10 @@ class TeamController extends Controller
         ]);
     }
 
-    public function removeUser(Team $team, User $user)
+    public function removeUser(Team $team, User $user, Request $request)
     {
         $user->teams()->detach($team->id);
+        event(new RemoveUserFromTeam($user->id, $request->get('new_user', null), $team->id));
         return response()->json([
             'success' => true,
             'message' => 'User was removed from the Team'
