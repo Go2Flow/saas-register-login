@@ -22,6 +22,7 @@ Route::post('/team/{team}/invite', [TeamController::class, 'invite']);
 Route::get('/team/{team}/pending', [TeamController::class, 'pending']);
 Route::post('/team/{team}/invite/{invitation}/delete', [TeamController::class, 'inviteDelete']);
 Route::post('/team/{team}/user/{user}/remove', [TeamController::class, 'removeUser']);
+Route::post('/team/{team}/upload/logo', [TeamController::class, 'uploadLogo']);
 
 // Team API Tokens
 Route::post('/team/{team}/tokens/create', [TeamController::class, 'createToken']);

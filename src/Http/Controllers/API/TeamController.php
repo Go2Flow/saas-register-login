@@ -228,4 +228,20 @@ class TeamController extends Controller
             'message' => 'Team was created'
         ]);
     }
+
+    public function uploadLogo(Team $team, Request $request)
+    {
+        if(!$request->hasFile('logo')) {
+            return [
+                'success' => false,
+                'message' => 'No File given!',
+            ];
+        }
+        $team->clearMediaCollection(Team::MEDIA_LOGO);
+        $team->addMediaFromRequest('logo')->toMediaCollection(Team::MEDIA_LOGO);
+        return [
+            'success' => true,
+            'message' => 'Success',
+        ];
+    }
 }
