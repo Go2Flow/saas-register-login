@@ -143,9 +143,11 @@ class TeamRepository implements TeamRepositoryInterface
                 ->setActivatePSP36(true)
                 ->setSendWelcomeMail(false);
 
-            return $psp->createMerchant($merchant);
+            $merchantResponse =  $psp->createMerchant($merchant);
+            $psp->createWebhook($merchantResponse, 'https://courzly.io/api/psp-client/go2flow/finance/payment/status'); //@TODO:: move this to a config
+            return $merchantResponse;
         } else {
-            return '4053261b';
+            return '4053261b'; //@TODO:: move this to a config
         }
     }
 
