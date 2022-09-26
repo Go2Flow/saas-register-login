@@ -117,9 +117,17 @@ class TeamRepository implements TeamRepositoryInterface
     public function updateBank(Team $team, array $data): Team
     {
         $team = $this->update($team, $data);
-        $psp = new G2FApiService();
-        $bank = new Bank();
-        $psp->updateBank($bank);
+        if ($team->psp_id !== config('saas-register-login.dev_psp_id', '4053261b')) {
+            $psp = new G2FApiService();
+            $bank = new Bank();
+            $bank->setMerchantId($team->psp_id)
+                ->setCurrency($team->currency)
+                ->setIban($team->bank_iban)
+                ->setHolderName($team->name)
+                ->setCountry($team->billing_country)
+                ->setIsDefault();
+            $psp->updateBank($bank);
+        }
         return $team;
     }
 
@@ -167,10 +175,10 @@ class TeamRepository implements TeamRepositoryInterface
                 ->setSendWelcomeMail(false);
 
             $merchantResponse =  $psp->createMerchant($merchant);
-            $psp->createWebhook($merchantResponse, 'https://courzly.com/api/psp-client/go2flow/finance/payment/status'); //@TODO:: move this to a config
+            $psp->createWebhook($merchantResponse, config('saas-register-login.webhook', 'https://courzly.com/api/psp-client/go2flow/finance/payment/status'));
             return $merchantResponse;
         } else {
-            return '4053261b'; //@TODO:: move this to a config
+            return config('saas-register-login.dev_psp_id', '4053261b');
         }
     }
 
