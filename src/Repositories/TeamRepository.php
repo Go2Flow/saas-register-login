@@ -9,6 +9,7 @@ use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Merchant;
 use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Personal;
 use Go2Flow\SaasRegisterLogin\Events\TeamCreated;
 use Go2Flow\SaasRegisterLogin\Mail\Invitation as InvitationMail;
+use Go2Flow\SaasRegisterLogin\Mail\PaymentModelChange;
 use Go2Flow\SaasRegisterLogin\Models\Team;
 use Go2Flow\SaasRegisterLogin\Models\Team\Invitation;
 use Go2Flow\SaasRegisterLogin\Models\User;
@@ -103,6 +104,9 @@ class TeamRepository implements TeamRepositoryInterface
                     unset($data['owner_id']);
                 }
             }
+        }
+        if (isset($data['payment_model']) && $data['payment_model'] !== $team->payment_model) {
+            Mail::to('support@courzly.com')->send(new PaymentModelChange($team));
         }
         $team->fill($data);
         $team->save();
