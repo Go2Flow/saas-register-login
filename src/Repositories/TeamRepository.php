@@ -123,6 +123,7 @@ class TeamRepository implements TeamRepositoryInterface
             $bank->setMerchantId($team->psp_id)
                 ->setCurrency($team->currency)
                 ->setIban($team->bank_iban)
+                ->setBic($team->bank_swift)
                 ->setHolderName($team->name)
                 ->setCountry($team->billing_country)
                 ->setIsDefault();
