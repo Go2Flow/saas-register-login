@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 * @property bigInteger $id
 * @property string $psp_id
 * @property string $psp_instance
+* @property string $kyc_status
+* @property string $payment_model
 * @property bigInteger $owner_id
 * @property string $name
 * @property string $email
@@ -62,6 +64,8 @@ abstract class AbstractTeam extends Model
         'id' => 'integer',
         'psp_id' => 'string',
         'psp_instance' => 'string',
+        'kyc_status' => 'string',
+        'payment_model' => 'string',
         'owner_id' => 'integer',
         'name' => 'string',
         'email' => 'string',
@@ -96,6 +100,8 @@ abstract class AbstractTeam extends Model
         'id',
         'psp_id',
         'psp_instance',
+        'kyc_status',
+        'payment_model',
         'owner_id',
         'name',
         'email',
