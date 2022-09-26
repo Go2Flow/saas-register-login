@@ -107,6 +107,14 @@ class TeamRepository implements TeamRepositoryInterface
         $team->save();
         return $team->refresh();
     }
+    
+    public function updateKycStatus(Team $team): void
+    {
+        $psp = new G2FApiService();
+        $status = $psp->getVerivication($team->psp_id);
+        $team->kyc_status = $status;
+        $team->save();
+    }
 
     /**
      * @param array $data

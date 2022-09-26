@@ -28,4 +28,10 @@ interface TeamRepositoryInterface
      * @return Team
      */
     public function update(Team $team, array $data):Team;
+
+    /**
+     * @param Team $team
+     * @return void
+     */
+    public function updateKycStatus(Team $team): void;
 }

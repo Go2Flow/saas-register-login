@@ -4,6 +4,7 @@ namespace Go2Flow\SaasRegisterLogin;
 
 use App\Repositories\PermissionRepository;
 use Go2Flow\SaasRegisterLogin\Console\Team\DeleteOldInvites;
+use Go2Flow\SaasRegisterLogin\Console\Team\UpdateKycStatus;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\AuthIsBackendUser;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\AuthIsEmbedTeam;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\TeamsPermission;
@@ -74,7 +75,7 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
             ], 'lang');*/
 
             // Registering package commands.
-            $this->commands([DeleteOldInvites::class]);
+            $this->commands([DeleteOldInvites::class, UpdateKycStatus::class]);
         }
     }
 
