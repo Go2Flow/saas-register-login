@@ -4,6 +4,7 @@ namespace Go2Flow\SaasRegisterLogin\Repositories;
 
 use Go2Flow\PSPClient\Services\Go2FlowFinance\Constants;
 use Go2Flow\PSPClient\Services\Go2FlowFinance\G2FApiService;
+use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Bank;
 use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Merchant;
 use Go2Flow\PSPClient\Services\Go2FlowFinance\Models\Personal;
 use Go2Flow\SaasRegisterLogin\Events\TeamCreated;
@@ -107,7 +108,21 @@ class TeamRepository implements TeamRepositoryInterface
         $team->save();
         return $team->refresh();
     }
-    
+
+    /**
+     * @param Team $team
+     * @param array $data
+     * @return Team
+     */
+    public function updateBank(Team $team, array $data): Team
+    {
+        $team = $this->update($team, $data);
+        $psp = new G2FApiService();
+        $bank = new Bank();
+        $psp->updateBank($bank);
+        return $team;
+    }
+
     public function updateKycStatus(Team $team): void
     {
         $psp = new G2FApiService();

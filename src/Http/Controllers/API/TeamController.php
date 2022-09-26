@@ -166,7 +166,7 @@ class TeamController extends Controller
 
     public function updateBank(Team $team, TeamUpdateBankRequest $request)
     {
-        $this->teamRepository->update($team, $request->all());
+        $this->teamRepository->updateBank($team, $request->all());
         return response()->json([
             'success' => true,
             'message' => 'Team was updated'

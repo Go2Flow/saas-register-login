@@ -31,6 +31,13 @@ interface TeamRepositoryInterface
 
     /**
      * @param Team $team
+     * @param array $data
+     * @return Team
+     */
+    public function updateBank(Team $team, array $data):Team;
+
+    /**
+     * @param Team $team
      * @return void
      */
     public function updateKycStatus(Team $team): void;
