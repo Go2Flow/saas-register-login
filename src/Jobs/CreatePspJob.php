@@ -3,6 +3,7 @@
 namespace Go2Flow\SaasRegisterLogin\Jobs;
 
 use Go2Flow\SaasRegisterLogin\Models\Team;
+use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,8 +41,10 @@ class CreatePspJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
     {
         /** @var Team $team */
         $team = Team::findOrFail($this->teamId);
-        $psp_instance = $this->teamRepository->createPSPInstanceName($team->name, uniqid());
-        $psp_id = $this->teamRepository->createPspMerchant($team, $psp_instance);
+        /** @var TeamRepositoryInterface $teamRepository */
+        $teamRepository = app(TeamRepositoryInterface::class);
+        $psp_instance = $teamRepository->createPSPInstanceName($team->name, uniqid());
+        $psp_id = $teamRepository->createPspMerchant($team, $psp_instance);
         $team->psp_instance = $psp_instance;
         $team->psp_id = $psp_id;
         $team->save();
