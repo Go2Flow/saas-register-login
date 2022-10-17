@@ -41,4 +41,18 @@ interface TeamRepositoryInterface
      * @return void
      */
     public function updateKycStatus(Team $team): void;
+
+    /**
+     * @param string $name
+     * @param string $unique
+     * @return string
+     */
+    public function createPSPInstanceName(string $name, string $unique = ''):string;
+
+    /**
+     * @param Team $team
+     * @param string $instanceName
+     * @return string|null
+     */
+    public function createPspMerchant(Team $team, string $instanceName): string|null;
 }

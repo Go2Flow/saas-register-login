@@ -9,4 +9,5 @@ return [
     'is_multi_language' => true,
     'dev_psp_id' => '4053261b',
     'webhook' => 'https://courzly.com/api/psp-client/go2flow/finance/payment/status',
+    'team_creation_queue' => 'default',
 ];

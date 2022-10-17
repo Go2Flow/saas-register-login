@@ -36,9 +36,6 @@ class TeamRepository implements TeamRepositoryInterface
             $data['languages'] = [$data['languages']];
         }
 
-        $data['psp_instance'] = $this->createPSPInstanceName($data['name'], uniqid());
-        $data['psp_id'] = $this->createPspMerchant($data, $owner, $lang, $data['psp_instance']);
-
         $team = new Team($data);
         $team->save();
         $team->refresh();
@@ -145,12 +142,11 @@ class TeamRepository implements TeamRepositoryInterface
     }
 
     /**
-     * @param array $data
-     * @param User|null $owner
-     * @param mixed $lang
+     * @param Team $team
+     * @param string $instanceName
      * @return string|null
      */
-    private function createPspMerchant(array $data, ?User $owner, mixed $lang, $instanceName): string|null
+    public function createPspMerchant(Team $team, string $instanceName): string|null
     {
         $psp = new G2FApiService();
         $merchant = new Merchant();
@@ -158,24 +154,24 @@ class TeamRepository implements TeamRepositoryInterface
 
         if(env('APP_ENV') == 'production') {
             $personal
-                ->setCompany($data['name'])
-                ->setAddress($data['billing_address'])
-                ->setCity($data['billing_city'])
-                ->setCountry($data['billing_country'])
-                ->setZip($data['billing_postal_code'])
-                ->setSalutation($owner->salutation)
-                ->setFirstName($owner->firstname)
-                ->setLastName($owner->lastname)
-                ->setVatNr($data['vat_id'])
-                ->setPhoneNumber($data['phone_number'])
-                ->setPhonePrefix($data['phone_prefix']);
+                ->setCompany($team->name)
+                ->setAddress($team->billing_address)
+                ->setCity($team->billing_city)
+                ->setCountry($team->billing_country)
+                ->setZip($team->billing_postal_code)
+                ->setSalutation($team->owner->salutation)
+                ->setFirstName($team->owner->firstname)
+                ->setLastName($team->owner->lastname)
+                ->setVatNr($team->vat_id)
+                ->setPhoneNumber($team->phone_number)
+                ->setPhonePrefix($team->phone_prefix);
 
             $merchant
-                ->setEmail($data['email'])
+                ->setEmail($team->email)
                 ->setMerchantData($personal)
                 ->setSubdomain($instanceName)
                 ->setReference('courzly-' . env('APP_ENV'))
-                ->setLanguage($lang)
+                ->setLanguage($team->languages[0])
                 ->setActivatePSP36(true)
                 ->setSendWelcomeMail(false);
 
@@ -187,7 +183,7 @@ class TeamRepository implements TeamRepositoryInterface
         }
     }
 
-    public function createPSPInstanceName($name, $unique)
+    public function createPSPInstanceName(string $name, string $unique = ''):string
     {
         if(env('APP_ENV') == 'production') {
             return 'courzly-' . $unique . '-' . Str::slug($name);

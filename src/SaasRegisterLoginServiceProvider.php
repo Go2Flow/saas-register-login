@@ -8,6 +8,7 @@ use Go2Flow\SaasRegisterLogin\Console\Team\UpdateKycStatus;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\AuthIsBackendUser;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\AuthIsEmbedTeam;
 use Go2Flow\SaasRegisterLogin\Http\Middleware\TeamsPermission;
+use Go2Flow\SaasRegisterLogin\Providers\EventServiceProvider;
 use Go2Flow\SaasRegisterLogin\Repositories\PermissionRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepository;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
@@ -91,7 +92,6 @@ class SaasRegisterLoginServiceProvider extends ServiceProvider
         $this->app->singleton('saas-register-login', function () {
             return new SaasRegisterLogin;
         });
-
-
+        $this->app->register(EventServiceProvider::class);
     }
 }
