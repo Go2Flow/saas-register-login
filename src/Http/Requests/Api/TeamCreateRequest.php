@@ -26,6 +26,7 @@ class TeamCreateRequest extends FormRequest
             'billing_country' => 'required',
             'currency' => 'required',
             'languages' => 'required',
+            'time_zone' => 'required',
             'phone_prefix' => ['required', 'max:5'],
             'phone_number' => ['required', 'max:50'],
         ];

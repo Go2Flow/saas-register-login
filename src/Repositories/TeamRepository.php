@@ -106,6 +106,7 @@ class TeamRepository implements TeamRepositoryInterface
             Mail::to('support@courzly.com')->send(new PaymentModelChange($team));
         }
         $team->fill($data);
+        session()->put($team->id.'_time_zone', $data['time_zone']);
         $team->save();
         return $team->refresh();
     }

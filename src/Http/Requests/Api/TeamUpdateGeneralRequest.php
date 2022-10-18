@@ -27,6 +27,8 @@ class TeamUpdateGeneralRequest extends FormRequest
             'billing_postal_code' => 'required',
             'billing_country' => 'required',
             'extra_billing_information' => 'nullable',
+            'time_zone' => 'required',
+            'languages' => 'required',
         ];
     }
 }
