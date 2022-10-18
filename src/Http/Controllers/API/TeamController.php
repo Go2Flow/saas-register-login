@@ -100,6 +100,13 @@ class TeamController extends Controller
                 $user_found = true;
             }
         }
+        $user = request()->user(); //or Auth::user()
+        if ($user) {
+            $user->tokens()->delete();
+        }
+
+        session()->flush();
+        session()->regenerate();
         return response()->json([
             'valid' => $valid,
             'user_found' => $user_found,
