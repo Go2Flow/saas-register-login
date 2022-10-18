@@ -51,4 +51,17 @@ class WorldCountryCurrencyController extends Controller
         }
         return response('', 404);
     }
+
+    public function getTimezoneOptions()
+    {
+        $action = World::timezones(['fields' => 'name']);
+        if ($action->success) {
+            $options = [];
+            foreach ($action->data as $timzeone) {
+                $options[] = ['value' => strtolower($timzeone['name']), 'label' => $timzeone['name']];
+            }
+            return $options;
+        }
+        return response('', 404);
+    }
 }

@@ -25,6 +25,7 @@ Route::post('/validator/unique/user/email', [ValidationController::class, 'valid
 Route::get('/options/country', [WorldCountryCurrencyController::class, 'getCountryOptions']);
 Route::get('/options/currency', [WorldCountryCurrencyController::class, 'getCurrencyOptions']);
 Route::get('/options/language', [WorldCountryCurrencyController::class, 'getLanguageOptions']);
+Route::get('/options/timezones', [WorldCountryCurrencyController::class, 'getTimezoneOptions']);
 // WorldCountryCurrency END
 Route::get('/options/referral', [ReferralController::class, 'getReferralOptions']);
 
