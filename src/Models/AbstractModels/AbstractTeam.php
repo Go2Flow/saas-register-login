@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 * @property string $phone_number
 * @property string $currency
 * @property json $languages
+* @property string $time_zone
 * @property string $extra_billing_information
 * @property string $billing_address
 * @property string $billing_address_line_2
@@ -52,9 +53,25 @@ use Illuminate\Database\Eloquent\Model;
 * @property \Illuminate\Database\Eloquent\Collection $locations
 * @property \Illuminate\Database\Eloquent\Collection $type_sets
 * @property \Illuminate\Database\Eloquent\Collection $taxes
+* @property \Illuminate\Database\Eloquent\Collection $emailLogs
+* @property \Illuminate\Database\Eloquent\Collection $courseIndices
+* @property \Illuminate\Database\Eloquent\Collection $courzly_invoices
+* @property \Illuminate\Database\Eloquent\Collection $defaultConfigs
+* @property \Illuminate\Database\Eloquent\Collection $teamAdditionalSettings
+* @property \Illuminate\Database\Eloquent\Collection $discoutRules
 */ 
 abstract class AbstractTeam extends Model
 {
+    /**  
+     * The model's default values for attributes.
+     * 
+     * @var array
+     */
+    protected $attributes = [
+        'payment_model' => 'pay_as_you_go',
+        'time_zone' => 'Europe/Berlin'
+    ];
+    
     /**  
      * The attributes that should be cast to native types.
      * 
@@ -73,6 +90,7 @@ abstract class AbstractTeam extends Model
         'phone_number' => 'string',
         'currency' => 'string',
         'languages' => 'array',
+        'time_zone' => 'string',
         'extra_billing_information' => 'string',
         'billing_address' => 'string',
         'billing_address_line_2' => 'string',
@@ -109,6 +127,7 @@ abstract class AbstractTeam extends Model
         'phone_number',
         'currency',
         'languages',
+        'time_zone',
         'extra_billing_information',
         'billing_address',
         'billing_address_line_2',
@@ -169,7 +188,7 @@ abstract class AbstractTeam extends Model
     
     public function options()
     {
-        return $this->hasMany('\App\Models\Course\Option', 'team_id', 'id');
+        return $this->hasMany('\App\Models\Course\Option\Option', 'team_id', 'id');
     }
     
     public function locations()
@@ -185,6 +204,36 @@ abstract class AbstractTeam extends Model
     public function taxes()
     {
         return $this->hasMany('\App\Models\Tax', 'team_id', 'id');
+    }
+    
+    public function emailLogs()
+    {
+        return $this->hasMany('\App\Models\EmailLog', 'team_id', 'id');
+    }
+    
+    public function courseIndices()
+    {
+        return $this->hasMany('\App\Models\Course\Index\CourseIndex', 'team_id', 'id');
+    }
+    
+    public function courzly_invoices()
+    {
+        return $this->hasMany('\App\Models\CourzlyInvoice', 'team_id', 'id');
+    }
+    
+    public function defaultConfigs()
+    {
+        return $this->hasMany('\App\Models\DefaultConfig', 'team_id', 'id');
+    }
+    
+    public function teamAdditionalSettings()
+    {
+        return $this->hasMany('\App\Models\TeamAdditionalSettings', 'team_id', 'id');
+    }
+    
+    public function discoutRules()
+    {
+        return $this->hasMany('\App\Models\DiscountRules', 'team_id', 'id');
     }
     
     public function users()
