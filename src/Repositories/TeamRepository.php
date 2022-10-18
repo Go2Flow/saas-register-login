@@ -136,10 +136,12 @@ class TeamRepository implements TeamRepositoryInterface
 
     public function updateKycStatus(Team $team): void
     {
-        $psp = new G2FApiService();
-        $status = $psp->getVerivication($team->psp_id);
-        $team->kyc_status = $status;
-        $team->save();
+        if ($team->psp_id) {
+            $psp = new G2FApiService();
+            $status = $psp->getVerivication($team->psp_id);
+            $team->kyc_status = $status;
+            $team->save();
+        }
     }
 
     /**
