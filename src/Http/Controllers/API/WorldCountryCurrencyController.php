@@ -58,7 +58,7 @@ class WorldCountryCurrencyController extends Controller
         if ($action->success) {
             $options = [];
             foreach ($action->data as $timzeone) {
-                $options[] = ['value' => strtolower($timzeone['name']), 'label' => $timzeone['name']];
+                $options[] = ['value' => $timzeone['name'], 'label' => $timzeone['name']];
             }
             return $options;
         }
