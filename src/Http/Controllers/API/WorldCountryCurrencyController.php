@@ -60,7 +60,7 @@ class WorldCountryCurrencyController extends Controller
             foreach ($action->data as $timzeone) {
                 $options[] = ['value' => $timzeone['name'], 'label' => $timzeone['name']];
             }
-            return $options;
+            return usort($options, fn($a, $b) => $a['order'] <=> $b['order']);
         }
         return response('', 404);
     }
