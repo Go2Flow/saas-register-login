@@ -29,6 +29,7 @@ class TeamUpdateGeneralRequest extends FormRequest
             'extra_billing_information' => 'nullable',
             'time_zone' => 'required',
             'languages' => 'required',
+            'currency' => 'required',
         ];
     }
 }
