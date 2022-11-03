@@ -44,6 +44,9 @@ class CreatePspJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
         /** @var TeamRepositoryInterface $teamRepository */
         $teamRepository = app(TeamRepositoryInterface::class);
         $psp_instance = $teamRepository->createPSPInstanceName($team->name, uniqid());
+        if ($team->psp_instance) {
+            $psp_instance = $team->psp_instance;
+        }
         $psp_id = $teamRepository->createPspMerchant($team, $psp_instance);
         $team->psp_instance = $psp_instance;
         $team->psp_id = $psp_id;
