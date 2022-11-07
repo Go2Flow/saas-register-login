@@ -36,6 +36,7 @@ class TeamRepository implements TeamRepositoryInterface
             $data['languages'] = [$data['languages']];
         }
 
+        $data['service_fee'] = config('saas-register-login.default_service_fee', 1);
         $team = new Team($data);
         $team->save();
         $team->refresh();

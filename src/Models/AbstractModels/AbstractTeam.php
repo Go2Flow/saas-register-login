@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 * @property string $phone_prefix
 * @property string $phone_number
 * @property string $currency
+* @property integer $service_fee
 * @property json $languages
 * @property string $time_zone
 * @property string $extra_billing_information
@@ -89,6 +90,7 @@ abstract class AbstractTeam extends Model
         'phone_prefix' => 'string',
         'phone_number' => 'string',
         'currency' => 'string',
+        'service_fee' => 'integer',
         'languages' => 'array',
         'time_zone' => 'string',
         'extra_billing_information' => 'string',
@@ -126,6 +128,7 @@ abstract class AbstractTeam extends Model
         'phone_prefix',
         'phone_number',
         'currency',
+        'service_fee',
         'languages',
         'time_zone',
         'extra_billing_information',
