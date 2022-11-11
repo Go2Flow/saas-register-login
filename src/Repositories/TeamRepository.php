@@ -183,7 +183,12 @@ class TeamRepository implements TeamRepositoryInterface
 
             $merchantResponse = $psp->createMerchant($merchant);
             if ($merchantResponse) {
-                $psp->createWebhook($merchantResponse, config('saas-register-login.webhook', 'https://courzly.com/api/psp-client/go2flow/finance/payment/status'));
+                $webhookUrl =  config('saas-register-login.webhook', 'https://courzly.com/api/psp-client/go2flow/finance/payment/status/{team}');
+                $webhookUrl = str_replace('{team}', $team->id, $webhookUrl);
+                $psp->createWebhook(
+                    $merchantResponse,
+                    $webhookUrl
+                );
             }
             return $merchantResponse;
         } else {

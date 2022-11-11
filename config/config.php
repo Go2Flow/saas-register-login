@@ -8,7 +8,7 @@ return [
     'open_middleware' => ['web'],
     'is_multi_language' => true,
     'dev_psp_id' => '4053261b',
-    'webhook' => 'https://courzly.com/api/psp-client/go2flow/finance/payment/status',
+    'webhook' => 'https://courzly.com/api/psp-client/go2flow/finance/payment/status/{team}',
     'team_creation_queue' => 'default',
     'default_service_fee' => 1,
 ];
