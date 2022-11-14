@@ -122,7 +122,10 @@ class TeamRepository implements TeamRepositoryInterface
     public function updateBank(Team $team, array $data): Team
     {
         $team = $this->update($team, $data);
-        if ($team->psp_id !== config('saas-register-login.dev_psp_id', '4053261b')) {
+        return $team;
+        if (
+            $team->psp_id !== config('saas-register-login.dev_psp_id', '4053261b')
+        ) {
             $psp = new G2FApiService();
             $bank = new Bank();
             $bank->setMerchantId($team->psp_id)
