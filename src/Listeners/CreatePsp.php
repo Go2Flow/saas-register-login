@@ -16,6 +16,8 @@ class CreatePsp implements ShouldQueue
      */
     public function handle(TeamCreated $event)
     {
-        CreatePspJob::dispatch($event->team->id)->onQueue(config('saas-register-login.team_creation_queue', 'default'));
+        if (config('saas-register-login.create_psp', false)) {
+            CreatePspJob::dispatch($event->team->id)->onQueue(config('saas-register-login.team_creation_queue', 'default'));
+        }
     }
 }

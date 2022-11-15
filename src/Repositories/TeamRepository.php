@@ -104,7 +104,7 @@ class TeamRepository implements TeamRepositoryInterface
             }
         }
         if (isset($data['payment_model']) && $data['payment_model'] !== $team->payment_model) {
-            Mail::to('support@courzly.com')->send(new PaymentModelChange($team));
+            Mail::to(config('saas-register-login.support_mail', 'support@courzly.com'))->send(new PaymentModelChange($team));
         }
         $team->fill($data);
         if (!empty($data['time_zone'])) {
@@ -179,7 +179,7 @@ class TeamRepository implements TeamRepositoryInterface
                 ->setEmail($team->email)
                 ->setMerchantData($personal)
                 ->setSubdomain($instanceName)
-                ->setReference('courzly-' . env('APP_ENV'))
+                ->setReference(config('saas-register-login.psp_instance_prefix', 'my-app-') . env('APP_ENV'))
                 ->setLanguage($team->languages[0])
                 ->setActivatePSP36(true)
                 ->setSendWelcomeMail(false);
@@ -202,9 +202,9 @@ class TeamRepository implements TeamRepositoryInterface
     public function createPSPInstanceName(string $name, string $unique = ''):string
     {
         if(env('APP_ENV') == 'production') {
-            return 'courzly-' . $unique . '-' . Str::slug($name);
+            return config('saas-register-login.psp_instance_prefix', 'my-app-') . $unique . '-' . Str::slug($name);
         } else {
-            return 'courzly-dev';
+            return config('saas-register-login.dev_psp_instance', 'courzly-dev');
         }
     }
 }
