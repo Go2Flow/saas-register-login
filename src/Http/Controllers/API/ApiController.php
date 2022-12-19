@@ -6,7 +6,7 @@ use Go2Flow\SaasRegisterLogin\Http\Requests\Api\UserCreateRequest;
 use Go2Flow\SaasRegisterLogin\Models\User;
 use Go2Flow\SaasRegisterLogin\Repositories\TeamRepositoryInterface;
 use Go2Flow\SaasRegisterLogin\Repositories\UserRepositoryInterface;
-use http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
