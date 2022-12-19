@@ -1,6 +1,7 @@
 <?php
 
 use Go2Flow\PSPClient\Http\Controllers\API\PaymentController;
+use Go2Flow\SaasRegisterLogin\Http\Controllers\API\ApiController;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\ReferralController;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\TeamController;
 use Go2Flow\SaasRegisterLogin\Http\Controllers\API\UserController;
@@ -31,3 +32,6 @@ Route::get('/options/referral', [ReferralController::class, 'getReferralOptions'
 
 Route::get('/team/{team}/invite/{invitationid}/validate/{hash}', [TeamController::class, 'inviteValidate']);
 Route::post('/team/{team}/invite/{invitationid}/accept/{hash}', [TeamController::class, 'acceptValidate']);
+
+//API contact point
+Route::post('apiLogin', [ApiController::class, 'login']);
