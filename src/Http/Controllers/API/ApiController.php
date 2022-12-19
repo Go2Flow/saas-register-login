@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
 
 class ApiController extends Controller
 {
@@ -39,12 +41,26 @@ class ApiController extends Controller
 
         $needVerification = false;
         $success = false;
+        $userToken = null;
+        $team = null;
+
         if (!$user) {
             $message = 'Wrong password or e-mail-address!';
         } elseif ($authResult && $user->hasVerifiedEmail()) {
             $success = true;
             $message = 'User login successfully';
-            $token = $user->createToken($this->makeTokenName($user))->plainTextToken;
+
+            if($user->tokens()->count()){
+                $userToken = $user->tokens()->first()->plain_text_token;
+            }else{
+                $accessToken = $user->createToken($this->makeTokenName($user));
+
+                $token = PersonalAccessToken::findToken($accessToken->plainTextToken);
+                $token->plain_text_token = $accessToken->plainTextToken;
+                $token->save();
+                $userToken = $token->plain_text_token;
+            }
+
             $team = auth('web')->user()->teams->first();
             if ($team) {
                 setSaasTeamId($team->id);
@@ -62,7 +78,8 @@ class ApiController extends Controller
             'success' => $success,
             'message' => $message,
             'team' => $team,
-            'token' => $token,
+            'user' => $user,
+            'token' => $userToken,
             'need_verification' => $needVerification
         ];
 
@@ -99,105 +116,9 @@ class ApiController extends Controller
         return response()->json($response);
     }
 
-    /**
-     * @param User $user
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function resend(User $user, Request $request)
-    {
-        if ($user->hasVerifiedEmail()) {
-            return $request->wantsJson()
-                ? new JsonResponse([], 204)
-                : redirect($this->localizeUrl('/login'));
-        }
-
-        $user->sendEmailVerificationNotification();
-
-        return $request->wantsJson()
-            ? new JsonResponse([
-                'success' => true,
-            ], 202)
-            : back()->with('resent', true);
-    }
-
-    public function impersonate(User $user, Request $request)
-    {
-        if (! $request->hasValidSignature()) {
-            abort(401);
-        }
-
-        auth('web')->login($user);
-        setSaasTeamId($user->teams->first()->id);
-        return $request->wantsJson()
-            ? new JsonResponse([], 204)
-            : redirect($this->localizeUrl('/login'));
-    }
-
-    public function sendResetPasswordMail(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
-        $response = Password::broker()->sendResetLink($request->only('email'));
-        $success = false;
-        if ($response === Password::broker()::RESET_LINK_SENT) {
-            $success = true;
-        }
-        return $request->wantsJson()
-            ? new JsonResponse([
-                'success' => $success,
-                'message' => $response
-            ], 202)
-            : back()->with('send_password_reset', true);
-    }
-
-    public function passwortReset(Request $request)
-    {
-        $token = $request->route()->parameter('token');
-        return $request->wantsJson()
-            ? new JsonResponse([], 204)
-            : redirect($this->localizeUrl('/reset/password/'.$token.'/'.$request->email));
-    }
-
-    public function passwordResetSave(Request $request)
-    {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
-        ]);
-
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->setRememberToken(Str::random(60));
-
-                $user->save();
-
-                event(new PasswordReset($user));
-            }
-        );
-        $success = false;
-        if ($status === Password::PASSWORD_RESET) {
-            $success = true;
-            $user = User::whereEmail($request->email)->first();
-            if (!$user->hasVerifiedEmail() && $user->markEmailAsVerified()) {
-                event(new Verified($user));
-            }
-            auth('web')->login($user);
-            setSaasTeamId($user->teams->first()->id);
-        }
-        return new JsonResponse([
-            'success' => $success,
-            'message' => $status
-        ], 202);
-    }
-
     private function makeTokenName(User $user): string
     {
-        $name = strtolower($user->lastname).' '.strtolower($user->firstname);
-        $name = ucwords($name);
-        return str_replace(' ', '', $name);
+        $name = strtolower($user->lastname).'_'.strtolower($user->firstname);
+        return $name.'_ApiToken';
     }
 }
