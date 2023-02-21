@@ -17,8 +17,8 @@ class TeamUpdateBankRequest extends FormRequest
         return [
             'vat_id' => ['nullable', 'max:225', new ValidVatNumber()],
             'tax_number' => 'nullable',
-            'bank_name' => 'required',
-            'bank_iban' => 'required',
+            'bank_name' => 'nullable',
+            'bank_iban' => 'nullable',
             'bank_swift' => 'nullable',
         ];
     }
