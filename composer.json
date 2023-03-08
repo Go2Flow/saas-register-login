@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": "^8.0|^8.1|^8.2",
-        "illuminate/support": "^v9.*|^v10.*",
+        "illuminate/support": "^v9.18|^v10.0",
         "spatie/laravel-permission": "^v5",
         "spatie/laravel-medialibrary": "^10.3.4",
         "mpociot/vat-calculator": "^3.3",
