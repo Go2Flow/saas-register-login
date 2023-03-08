@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('phone_prefix', 5)->nullable(true)->change();
             $table->string('phone_number', 50)->nullable(true)->change();
             $table->string('currency', 3)->nullable(true)->change();
-            $table->json('languages')->default(['de'])->change();
         });
     }
     /**
