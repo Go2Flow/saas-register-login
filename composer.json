@@ -29,7 +29,7 @@
         "nnjeim/world": "^1.1",
         "go2flow/psp-client": "1.0.0",
         "laravel/fortify": "v1.16.0",
-        "laravel/sanctum": "^2.14.1"
+        "laravel/sanctum": "^2.14.1|^3.0"
     },
     "require-dev": {
 
