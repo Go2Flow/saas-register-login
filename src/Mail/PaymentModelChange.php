@@ -28,6 +28,6 @@ class PaymentModelChange extends Mailable
         if (!view()->exists($view)) {
             $view = 'srl::mail.team-payment-modal-change';
         }
-        return $this->subject('Bezahlmodell änderung angefragt')->markdown($view);
+        return $this->subject('Bezahlmodell Änderung angefragt')->markdown($view);
     }
 }
