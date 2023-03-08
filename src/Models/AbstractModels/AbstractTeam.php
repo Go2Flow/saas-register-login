@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $psp_instance
  * @property string $kyc_status
  * @property string $payment_model
- * @property bigInteger $owner_id
+ * @property bigInteger $user_id
  * @property string $name
  * @property string $email
  * @property string $phone_prefix
@@ -88,7 +88,7 @@ abstract class AbstractTeam extends Model
         'psp_instance' => 'string',
         'kyc_status' => 'string',
         'payment_model' => 'string',
-        'owner_id' => 'integer',
+        'user_id' => 'integer',
         'name' => 'string',
         'email' => 'string',
         'phone_prefix' => 'string',
@@ -127,7 +127,7 @@ abstract class AbstractTeam extends Model
         'psp_instance',
         'kyc_status',
         'payment_model',
-        'owner_id',
+        'user_id',
         'name',
         'email',
         'phone_prefix',
@@ -157,7 +157,7 @@ abstract class AbstractTeam extends Model
 
     public function owner()
     {
-        return $this->belongsTo('\Go2Flow\SaasRegisterLogin\Models\User', 'owner_id', 'id');
+        return $this->belongsTo('\Go2Flow\SaasRegisterLogin\Models\User', 'user_id', 'id');
     }
 
     public function invitations()

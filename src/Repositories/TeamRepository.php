@@ -28,7 +28,7 @@ class TeamRepository implements TeamRepositoryInterface
     public function create(array $data, ?User $owner): Team
     {
         if ($owner) {
-            $data['owner_id'] = $owner->id;
+            $data['user_id'] = $owner->id;
             $data['email'] = $data['email'] ?? $owner->email;
         }
         $lang = $data['languages'];
@@ -83,14 +83,14 @@ class TeamRepository implements TeamRepositoryInterface
     public function update(Team $team, array $data): Team
     {
         if (
-            isset($data['owner_id'])
-            && $team->owner_id != $data['owner_id']
+            isset($data['user_id'])
+            && $team->user_id != $data['user_id']
         ) {
-            if (auth()->user()->id !== $team->owner_id) {
-                unset($data['owner_id']);
+            if (auth()->user()->id !== $team->user_id) {
+                unset($data['user_id']);
             } else {
                 /** @var User $newOwner */
-                $newOwner = User::find($data['owner_id']);
+                $newOwner = User::find($data['user_id']);
                 $role = Role::query()
                     ->where('name', PermissionRepositoryInterface::ROLE_ADMIN_NAME)
                     ->where('team_id', $team->id)
@@ -99,7 +99,7 @@ class TeamRepository implements TeamRepositoryInterface
                     setPermissionsTeamId($team->id);
                     $newOwner->syncRoles($role);
                 } else {
-                    unset($data['owner_id']);
+                    unset($data['user_id']);
                 }
             }
         }

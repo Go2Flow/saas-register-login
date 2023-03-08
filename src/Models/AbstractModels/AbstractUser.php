@@ -96,7 +96,7 @@ abstract class AbstractUser extends \Illuminate\Foundation\Auth\User
     
     public function owned_teams()
     {
-        return $this->hasMany('\Go2Flow\SaasRegisterLogin\Models\Team', 'owner_id', 'id');
+        return $this->hasMany('\Go2Flow\SaasRegisterLogin\Models\Team', 'user_id', 'id');
     }
     
     public function created_courses()
