@@ -149,6 +149,7 @@ abstract class AbstractTeam extends Model
         'bank_name',
         'bank_iban',
         'bank_swift',
+        'personal_team',
         'checklist_completed',
         'created_at',
         'updated_at',
