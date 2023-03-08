@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class SkipperMigrations01SaasRegisterLogin2022051618154884 extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -30,6 +30,8 @@ class SkipperMigrations01SaasRegisterLogin2022051618154884 extends Migration
             $table->string('password', 255);
             $table->string('remember_token', 100)->nullable(true);
             $table->timestamp('terms_accepted_at')->nullable(true);
+            $table->foreignId('current_team_id')->nullable();
+            $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamp('created_at')->nullable(true);
             $table->timestamp('updated_at')->nullable(true);
             $table->timestamp('deleted_at')->nullable(true);
@@ -91,7 +93,7 @@ class SkipperMigrations01SaasRegisterLogin2022051618154884 extends Migration
             $table->string('secondary_color')->nullable(true);
             $table->primary(['team_id','layouts_id']);
         });
-        Schema::create('invitations', function (Blueprint $table) {
+        Schema::create('team_invitations', function (Blueprint $table) {
             $table->bigInteger('id')->autoIncrement()->unsigned();
             $table->string('email', 255);
             $table->bigInteger('role_id')->nullable(true)->unsigned();
@@ -105,7 +107,7 @@ class SkipperMigrations01SaasRegisterLogin2022051618154884 extends Migration
         Schema::table('teams', function (Blueprint $table) {
             $table->foreign('owner_id')->references('id')->on('users');
         });
-        Schema::table('invitations', function (Blueprint $table) {
+        Schema::table('team_invitations', function (Blueprint $table) {
             $table->foreign('team_id')->references('id')->on('teams');
         });
         Schema::table('team_user', function (Blueprint $table) {
@@ -132,8 +134,8 @@ class SkipperMigrations01SaasRegisterLogin2022051618154884 extends Migration
             $table->dropForeign(['user_id']);
             $table->dropForeign(['team_id']);
         });
-        if (Schema::hasTable('invitations')) {
-            Schema::table('invitations', function (Blueprint $table) {
+        if (Schema::hasTable('team_invitations')) {
+            Schema::table('team_invitations', function (Blueprint $table) {
                 $table->dropForeign(['team_id']);
             });
         }
@@ -147,7 +149,7 @@ class SkipperMigrations01SaasRegisterLogin2022051618154884 extends Migration
                 $table->dropForeign(['referral_id']);
             });
         }
-        Schema::dropIfExists('invitations');
+        Schema::dropIfExists('team_invitations');
         Schema::dropIfExists('team_layouts');
         Schema::dropIfExists('layouts');
         Schema::dropIfExists('referrals');
@@ -155,4 +157,4 @@ class SkipperMigrations01SaasRegisterLogin2022051618154884 extends Migration
         Schema::dropIfExists('teams');
         Schema::dropIfExists('users');
     }
-}
+};
