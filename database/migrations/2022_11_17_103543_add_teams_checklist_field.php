@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('teams', function (Blueprint $table) {
-            $table->boolean('checklist_completed')->nullable(true)->default(0)->after('bank_swift');
-        });
+        if (!Schema::hasColumn('teams', 'checklist_completed')) {
+            Schema::table('teams', function (Blueprint $table) {
+                $table->boolean('checklist_completed')->nullable(true)->default(0)->after('bank_swift');
+            });
+        }
     }
     /**
      * Reverse the migrations.
