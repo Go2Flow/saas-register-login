@@ -19,105 +19,134 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->bigInteger('id')->autoIncrement()->unsigned();
-            $table->bigInteger('referral_id')->nullable(true)->unsigned();
-            $table->string('salutation', 10)->nullable(true);
-            $table->string('firstname', 255);
-            $table->string('lastname', 255);
-            $table->string('email', 255);
-            $table->timestamp('email_verified_at')->nullable(true);
-            $table->string('password', 255);
-            $table->string('remember_token', 100)->nullable(true);
-            $table->timestamp('terms_accepted_at')->nullable(true);
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
-            $table->timestamp('created_at')->nullable(true);
-            $table->timestamp('updated_at')->nullable(true);
-            $table->timestamp('deleted_at')->nullable(true);
-            $table->unique(['email'], 'users_email_unique');
-        });
-        Schema::create('teams', function (Blueprint $table) {
-            $table->bigInteger('id')->autoIncrement()->unsigned();
-            $table->string('psp_id', 64);
-            $table->string('psp_instance');
-            $table->bigInteger('owner_id')->nullable(true)->unsigned();
-            $table->string('name', 255);
-            $table->string('email', 255);
-            $table->string('phone_prefix', 5);
-            $table->string('phone_number', 50);
-            $table->string('currency', 3);
-            $table->json('languages');
-            $table->string('extra_billing_information', 255)->nullable(true);
-            $table->string('billing_address', 255);
-            $table->string('billing_address_line_2', 255)->nullable(true);
-            $table->string('billing_city', 255);
-            $table->string('billing_state')->nullable(true);
-            $table->string('billing_postal_code', 25);
-            $table->string('billing_country', 2);
-            $table->json('receipt_emails')->nullable(true);
-            $table->string('vat_id', 50)->nullable(true);
-            $table->string('tax_number', 255)->nullable(true);
-            $table->string('bank_name')->nullable(true);
-            $table->string('bank_iban')->nullable(true);
-            $table->string('bank_swift')->nullable(true);
-            $table->timestamp('created_at')->nullable(true);
-            $table->timestamp('updated_at')->nullable(true);
-            $table->timestamp('deleted_at')->nullable(true);
-        });
-        Schema::create('team_user', function (Blueprint $table) {
-            $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('team_id')->unsigned();
-            $table->primary(['user_id','team_id']);
-        });
-        Schema::create('referrals', function (Blueprint $table) {
-            $table->bigInteger('id')->autoIncrement()->unsigned();
-            $table->json('name');
-            $table->timestamp('created_at')->nullable(true);
-            $table->timestamp('updated_at')->nullable(true);
-        });
-        Schema::create('layouts', function (Blueprint $table) {
-            $table->bigInteger('id')->autoIncrement()->unsigned();
-            $table->string('name')->nullable(true);
-            $table->string('version')->nullable(true);
-            $table->string('url')->nullable(true);
-            $table->boolean('available')->nullable(true);
-            $table->timestamp('created_at')->nullable(true);
-            $table->timestamp('updated_at')->nullable(true);
-        });
-        Schema::create('team_layouts', function (Blueprint $table) {
-            $table->bigInteger('team_id')->unsigned();
-            $table->bigInteger('layouts_id')->unsigned();
-            $table->longText('custom_css')->nullable(true);
-            $table->string('primary_color')->nullable(true);
-            $table->string('secondary_color')->nullable(true);
-            $table->primary(['team_id','layouts_id']);
-        });
-        Schema::create('team_invitations', function (Blueprint $table) {
-            $table->bigInteger('id')->autoIncrement()->unsigned();
-            $table->string('email', 255);
-            $table->bigInteger('role_id')->nullable(true)->unsigned();
-            $table->bigInteger('team_id')->nullable(true)->unsigned();
-            $table->timestamp('created_at')->nullable(true);
-            $table->timestamp('updated_at')->nullable(true);
-        });
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('referral_id')->references('id')->on('referrals');
-        });
-        Schema::table('teams', function (Blueprint $table) {
-            $table->foreign('owner_id')->references('id')->on('users');
-        });
-        Schema::table('team_invitations', function (Blueprint $table) {
-            $table->foreign('team_id')->references('id')->on('teams');
-        });
-        Schema::table('team_user', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('team_id')->references('id')->on('teams');
-        });
-        Schema::table('team_layouts', function (Blueprint $table) {
-            $table->foreign('team_id')->references('id')->on('teams');
-            $table->foreign('layouts_id')->references('id')->on('layouts');
-        });
+        if (!Schema::hasTable('users')) {
+            Schema::create('users', function (Blueprint $table) {
+                $table->bigInteger('id')->autoIncrement()->unsigned();
+                $table->bigInteger('referral_id')->nullable(true)->unsigned();
+                $table->string('salutation', 10)->nullable(true);
+                $table->string('firstname', 255);
+                $table->string('lastname', 255);
+                $table->string('email', 255);
+                $table->timestamp('email_verified_at')->nullable(true);
+                $table->string('password', 255);
+                $table->string('remember_token', 100)->nullable(true);
+                $table->timestamp('terms_accepted_at')->nullable(true);
+                $table->foreignId('current_team_id')->nullable();
+                $table->string('profile_photo_path', 2048)->nullable();
+                $table->timestamp('created_at')->nullable(true);
+                $table->timestamp('updated_at')->nullable(true);
+                $table->timestamp('deleted_at')->nullable(true);
+                $table->unique(['email'], 'users_email_unique');
+            });
+        }
+        if (!Schema::hasTable('teams')) {
+            Schema::create('teams', function (Blueprint $table) {
+                $table->bigInteger('id')->autoIncrement()->unsigned();
+                $table->string('psp_id', 64);
+                $table->string('psp_instance');
+                $table->bigInteger('owner_id')->nullable(true)->unsigned();
+                $table->string('name', 255);
+                $table->string('email', 255);
+                $table->string('phone_prefix', 5);
+                $table->string('phone_number', 50);
+                $table->string('currency', 3);
+                $table->json('languages');
+                $table->string('extra_billing_information', 255)->nullable(true);
+                $table->string('billing_address', 255);
+                $table->string('billing_address_line_2', 255)->nullable(true);
+                $table->string('billing_city', 255);
+                $table->string('billing_state')->nullable(true);
+                $table->string('billing_postal_code', 25);
+                $table->string('billing_country', 2);
+                $table->json('receipt_emails')->nullable(true);
+                $table->string('vat_id', 50)->nullable(true);
+                $table->string('tax_number', 255)->nullable(true);
+                $table->string('bank_name')->nullable(true);
+                $table->string('bank_iban')->nullable(true);
+                $table->string('bank_swift')->nullable(true);
+                $table->timestamp('created_at')->nullable(true);
+                $table->timestamp('updated_at')->nullable(true);
+                $table->timestamp('deleted_at')->nullable(true);
+            });
+        }
+        if (!Schema::hasTable('team_user')) {
+            Schema::create('team_user', function (Blueprint $table) {
+                $table->bigInteger('user_id')->unsigned();
+                $table->bigInteger('team_id')->unsigned();
+                $table->primary(['user_id','team_id']);
+            });
+        }
+        if (!Schema::hasTable('referrals')) {
+            Schema::create('referrals', function (Blueprint $table) {
+                $table->bigInteger('id')->autoIncrement()->unsigned();
+                $table->json('name');
+                $table->timestamp('created_at')->nullable(true);
+                $table->timestamp('updated_at')->nullable(true);
+            });
+        }
+        if (!Schema::hasTable('layouts')) {
+            Schema::create('layouts', function (Blueprint $table) {
+                $table->bigInteger('id')->autoIncrement()->unsigned();
+                $table->string('name')->nullable(true);
+                $table->string('version')->nullable(true);
+                $table->string('url')->nullable(true);
+                $table->boolean('available')->nullable(true);
+                $table->timestamp('created_at')->nullable(true);
+                $table->timestamp('updated_at')->nullable(true);
+            });
+        }
+        if (!Schema::hasTable('team_layouts')) {
+            Schema::create('team_layouts', function (Blueprint $table) {
+                $table->bigInteger('team_id')->unsigned();
+                $table->bigInteger('layouts_id')->unsigned();
+                $table->longText('custom_css')->nullable(true);
+                $table->string('primary_color')->nullable(true);
+                $table->string('secondary_color')->nullable(true);
+                $table->primary(['team_id','layouts_id']);
+            });
+        }
+        if (!Schema::hasTable('team_invitations')) {
+            Schema::create('team_invitations', function (Blueprint $table) {
+                $table->bigInteger('id')->autoIncrement()->unsigned();
+                $table->string('email', 255);
+                $table->bigInteger('role_id')->nullable(true)->unsigned();
+                $table->bigInteger('team_id')->nullable(true)->unsigned();
+                $table->timestamp('created_at')->nullable(true);
+                $table->timestamp('updated_at')->nullable(true);
+            });
+        }
+        try {
+            Schema::table('users', function (Blueprint $table) {
+                $table->foreign('referral_id')->references('id')->on('referrals');
+            });
+        } catch (Exception $e) {
+        }
+        try {
+            Schema::table('teams', function (Blueprint $table) {
+                $table->foreign('owner_id')->references('id')->on('users');
+            });
+        } catch (Exception $e) {
+        }
+        try {
+            Schema::table('team_invitations', function (Blueprint $table) {
+                $table->foreign('team_id')->references('id')->on('teams');
+            });
+        } catch (Exception $e) {
+        }
+        try {
+            Schema::table('team_user', function (Blueprint $table) {
+                $table->foreign('user_id')->references('id')->on('users');
+                $table->foreign('team_id')->references('id')->on('teams');
+            });
+        } catch (Exception $e) {
+        }
+        try {
+            Schema::table('team_layouts', function (Blueprint $table) {
+                $table->foreign('team_id')->references('id')->on('teams');
+                $table->foreign('layouts_id')->references('id')->on('layouts');
+            });
+        } catch (Exception $e) {
+        }
     }
     /**
      * Reverse the migrations.
