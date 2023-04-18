@@ -6,13 +6,12 @@ use Go2Flow\SaasRegisterLogin\Models\AbstractModels\AbstractUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends AbstractUser implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $guard_name = 'sanctum';
 
