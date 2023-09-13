@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $billing_postal_code
  * @property string $billing_country
  * @property json $receipt_emails
+ * @property string|null $billing_email
  * @property string $vat_id
  * @property string $tax_number
  * @property string $bank_name
@@ -105,6 +106,7 @@ abstract class AbstractTeam extends Model
         'billing_postal_code' => 'string',
         'billing_country' => 'string',
         'receipt_emails' => 'array',
+        'billing_email' => 'string',
         'vat_id' => 'string',
         'tax_number' => 'string',
         'bank_name' => 'string',
@@ -144,6 +146,7 @@ abstract class AbstractTeam extends Model
         'billing_postal_code',
         'billing_country',
         'receipt_emails',
+        'billing_email',
         'vat_id',
         'tax_number',
         'bank_name',

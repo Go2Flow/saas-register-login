@@ -20,6 +20,7 @@ class TeamUpdateGeneralRequest extends FormRequest
             'phone_number' => ['required', 'max:50'],
             'user_id' => 'required',
             'receipt_emails.*' => 'email',
+            'billing_email' => 'email|nullable',
             'billing_address' => 'required',
             'billing_address_line_2' => 'nullable',
             'billing_city' => 'required',
